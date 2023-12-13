@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.inputWithBorder {
+    border-bottom: 3px solid black;
+  }
+  .search-input{
+    border: none !important;
+  }
+  .ant-input-wrapper{
+    border: none !important;
+  }
+  .ant-input{
+    border: none !important;
+
+  }
+  .border{
+    border: 1px solid rgb(216, 210, 210) !important;
+  }
+  .ant-btn{
+    border: none !important;
+  }
+
+  .ant-menu-item:hover {
+    color: rgb(49, 204, 243) !important; 
+ 
+  }
+ 
+
+  .ant-menu-item-selected {
+    background-color: transparent !important;
+    color: rgb(49, 204, 243) !important; 
+  }
+  .ant-menu-submenu-title:hover{
+    color: rgb(49, 204, 243) !important; 
+  }
+
+  .ant-menu-submenu-title-selected{
+    color: rgb(49, 204, 243) !important;
+  }
+  .ant-upload{
+    width: 100% !important;
+    margin-bottom: 40px !important;
+  }
+  .ant-select-selector{
+    height: 40px !important;
+  }
+  #loginForm_gender_help{
+    margin-top: 8px !important;
+  }
