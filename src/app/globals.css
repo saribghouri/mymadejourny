@@ -49,3 +49,9 @@
   #loginForm_gender_help{
     margin-top: 8px !important;
   }
+  .pharmacy-img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  

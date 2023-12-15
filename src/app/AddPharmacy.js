@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber, Select } from "antd";
+import { Button, Form, Input, InputNumber, Select, message  } from "antd";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Cookies from 'js-cookie';
@@ -7,13 +7,12 @@ const AddPharmacy = () => {
   const { Option } = Select;
   const [loading, setLoading] = useState(false);
   const onFinish = async (values) => {
-    console.log(values);
+  
     try {
       const requestBody = {
         emailAddress: values.emailAddress,
         password: values.password,
-        username: values.username,
-
+        userName: values.username,
         userRole: values.userType,
         gender: values.gender,
       };
@@ -29,9 +28,9 @@ const AddPharmacy = () => {
           body: JSON.stringify(requestBody),
         }
       );
-
+      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
       if (response.ok) {
-        console.log("User registered successfully");
+        message.success('Pharmacy added successfully');
         router.push("/dashboard");
       } else {
         console.error("Registration failed:", response.statusText);

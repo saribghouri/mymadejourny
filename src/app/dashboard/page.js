@@ -1,6 +1,18 @@
 "use client";
-
 import React, { useState } from "react";
+import {
+  Layout,
+  Menu,
+  Button,
+  theme,
+  Input,
+  Dropdown,
+  Space,
+  Modal,
+} from "antd";
+import Link from "antd/es/typography/Link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   BookOutlined,
   ContainerOutlined,
@@ -19,21 +31,20 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu, Button, theme, Input, Dropdown, Space, Card, Modal } from "antd";
-import Link from "antd/es/typography/Link";
-import Image from "next/image";
-const { Header, Sider } = Layout;
-import { useRouter } from "next/navigation";
+
 import AddDoctor from "../AddDoctor";
-import PharmacyData from "../pharmacyData";
 import DoctorData from "../DoctorData";
 import AddPharmacy from "../AddPharmacy";
 import AddPharmacies from "../AddPharmacies";
+import ShowPharmacies from "../ShowPharmacies";
+
+const { Header, Sider } = Layout;
 
 const App = () => {
   const [showAddDoctor, setShowAddDoctor] = useState(false);
   const [showAddPharmacy, setShowAddPharmacy] = useState(false);
   const [showPharmacy, setShowPharmacy] = useState(false);
+  const [ShowAllPharmacie, setShowAllPharmacies] = useState(false);
   const [showDoctor, setShowDoctor] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -50,6 +61,13 @@ const App = () => {
   };
   const handleShowPharmacyData = () => {
     setShowPharmacy(true);
+    setShowAllPharmacies(false);
+    setShowAddDoctor(false);
+    setShowAddPharmacy(false);
+    setShowDoctor(false);
+  };
+  const handleShowPharmacies = () => {
+    setShowAllPharmacies(true);
     setShowAddDoctor(false);
     setShowAddPharmacy(false);
     setShowDoctor(false);
@@ -77,7 +95,7 @@ const App = () => {
 
   const userName = localStorage.getItem("data");
   const userId = localStorage.getItem("userRole");
-  console.log(userId)
+  console.log(userId);
   const cleanedUserName = userName.replace(/"/g, "");
 
   console.log("qaebqeb", cleanedUserName);
@@ -100,11 +118,11 @@ const App = () => {
 
   const getUserRole = () => {
     const userName = localStorage.getItem("data");
-    const cleanedUserName = userName !== null ? userName.replace(/"/g, "") : userName;
-
+    const cleanedUserName =
+      userName !== null ? userName.replace(/"/g, "") : userName;
 
     const userId = localStorage.getItem("userRole");
-    console.log("userId",userId)
+    console.log("userId", userId);
 
     if (cleanedUserName.includes("admin")) {
       return "1";
@@ -112,19 +130,18 @@ const App = () => {
       return "3";
     } else if (cleanedUserName.includes("pharmacy")) {
       return "4";
-    } else if(userId.includes("3")) {
+    } else if (userId.includes("3")) {
       return "3";
-    }else if(userId.includes("4")){
-return "4"
+    } else if (userId.includes("4")) {
+      return "4";
     }
   };
 
   const generateMenuItems = () => {
-    
     const userRole = getUserRole();
 
     if (userRole === "1") {
-      console.log("sabgqebew")
+      console.log("sabgqebew");
       return [
         getItem("Dashboard ", "1", <DashboardOutlined />),
         getItem("Pages", "sub1", <BookOutlined />, [
@@ -132,43 +149,32 @@ return "4"
           getItem("Bill", "2"),
           getItem("Alex", "3"),
         ]),
-        getItem(
-          "Doctor",
-          "sub2",
-          <TeamOutlined />,
-          [
-            getItem(
-              <>
-                <button onClick={handleShowDoctorData} >
-                  {" "}
-                  Show Doctors
-                </button>
-              </>
-            ),
-            getItem(
-              <>
+        getItem("Doctor", "sub2", <TeamOutlined />, [
+          getItem(
+            <>
+              <button onClick={handleShowDoctorData}> Show Doctors</button>
+            </>
+          ),
+          getItem(
+            <>
               <button onClick={() => handleClick("doctor")}> Add Doctor</button>
-              </>
-            ),
+            </>
+          ),
         ]),
-        getItem(
-          "Pharmacy",
-          "sub",
-          <TeamOutlined />,
-          [
-            getItem(
-              <>
-                <button onClick={handleShowPharmacyData}>Show Pharmacy</button>
-              </>
-            ),
-            getItem(
-              <>
-                <button onClick={() => handleClick("pharmacy")}>
-                  {" "}
-                  Add Pharmacy
-                </button>
-              </>
-            ),
+        getItem("Pharmacy", "sub", <TeamOutlined />, [
+          getItem(
+            <>
+              <button onClick={handleShowPharmacyData}>Show Pharmacy</button>
+            </>
+          ),
+          getItem(
+            <>
+              <button onClick={() => handleClick("pharmacy")}>
+                {" "}
+                Add Pharmacy
+              </button>
+            </>
+          ),
         ]),
         getItem("Layout", "20", <LayoutOutlined />),
         getItem("Components"),
@@ -196,15 +202,15 @@ return "4"
     } else if (userRole === "3") {
       return [
         getItem("Dashboard ", "1", <DashboardOutlined />),
-        getItem("doctordata", "sub14",  <TeamOutlined />, [
+        getItem("doctordata", "sub14", <TeamOutlined />, [
           getItem(
             <>
-          <a>vbwbewb</a>
+              <a>vbwbewb</a>
             </>
           ),
           getItem(
             <>
-             <a>dbwbwbn</a>
+              <a>dbwbwbn</a>
             </>
           ),
         ]),
@@ -212,18 +218,18 @@ return "4"
     } else if (userRole === "4") {
       return [
         getItem("Dashboard ", "1", <DashboardOutlined />),
-        getItem("Doctor", "sub2", <TeamOutlined />, [
+        getItem("pharmacy", "sub2", <TeamOutlined />, [
           getItem(
             <>
-              <button  onClick={showModal}>
-                {" "}
-                Add Pharmacies
-              </button>
+              <button onClick={showModal}> Add Pharmacies</button>
             </>
           ),
           getItem(
             <>
-              <button > show Pharmacies </button>
+              <button onClick={handleShowPharmacies}>
+                {" "}
+                Show Pharmacies{" "}
+              </button>
             </>
           ),
         ]),
@@ -234,52 +240,6 @@ return "4"
   };
 
   const item = generateMenuItems();
-
-  // const item = [
-  //   getItem("Dashboard ", "1", <DashboardOutlined />),
-
-  //   getItem("Pages", "sub1", <BookOutlined />, [
-  //     getItem("Tom", "1"),
-  //     getItem("Bill", "2"),
-  //     getItem("Alex", "3"),
-  //   ]),
-  //   getItem("Doctor", "sub2", <TeamOutlined />, [
-  //     getItem(
-  //       <>
-  //         <button onClick={() => handleClick("pharmacy")}> Add Pharmacy</button>
-  //       </>
-  //     ),
-  //     getItem(
-  //       <>
-  //         <button onClick={() => handleClick("doctor")}> Add Doctor</button>
-  //       </>
-  //     ),
-  //   ]),
-  //   getItem("Layout", "20", <LayoutOutlined />),
-  //   getItem("Components"),
-
-  //   getItem("Basic UI", "sub3", <ContainerOutlined />, [
-  //     getItem("Tom", "5"),
-  //     getItem("Bill", "6"),
-  //     getItem("Alex", "7"),
-  //   ]),
-
-  //   getItem("Extended UI", "sub4", <DeploymentUnitOutlined />, [
-  //     getItem("Tom", "8"),
-  //     getItem("Bill", "9"),
-  //     getItem("Alex", "10"),
-  //   ]),
-  //   getItem("Icons", "sub5", <InfoOutlined />, [
-  //     getItem("Tom", "11"),
-  //     getItem("Bill", "12"),
-  //     getItem("Alex", "13"),
-  //   ]),
-  //   getItem("Chart ", "sub6", <PieChartOutlined />, [
-  //     getItem("Tom", "14"),
-  //     getItem("Bill", "15"),
-  //     getItem("Alex", "16"),
-  //   ]),
-  // ];
 
   const items = [
     {
@@ -332,27 +292,29 @@ return "4"
         minHeight: "100vh",
       }}
     >
-
-
-      <Modal  footer={null} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-      <AddPharmacies/>
+      <Modal
+        footer={null}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <AddPharmacies />
       </Modal>
 
-
-
-
-      <Sider
+      <Sider className=""
         collapsible
         collapsed={collapsed}
         onCollapse={(value) => setCollapsed(value)}
       >
-        <div className="p-[30px] text-[22px] font-bold">
+        <div className="p-[30px] text-[22px] ">
           <h1 className="text-white text-center">
-            {cleanedUserName[3]}
-            {cleanedUserName[4]}
-            {cleanedUserName[5]}
-            {cleanedUserName[6]}
-            {cleanedUserName[7]}
+          <Image
+                  width={1000}
+                  height={1000}
+                  alt=""
+                  className=""
+                  src="/assserts/images/logo.png"
+                />
           </h1>
         </div>
         <div className="demo-logo-vertical bg-[#fff]" />
@@ -384,11 +346,11 @@ return "4"
                   height: 64,
                 }}
               />
-              <Input
+              {/* <Input
                 className="w-[300px] rounded-[40px]"
                 placeholder="Input search text"
                 suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
-              />
+              /> */}
             </div>
             <div>
               <div className="flex text-center items-center">
@@ -420,20 +382,9 @@ return "4"
 
         <div>
           <div>
-            <div className="flex justify-between p-[30px]">
-              <div>
-                <h1 className="text-[#918f8f] text-[18px] font-bold">
-                  Welcome!
-                </h1>
-              </div>
-              <div className="flex gap-4">
-                <h1 className="">Velonic</h1>
-                <h1 className="">Dashboard</h1>
-                <h1 className="">Welcome!</h1>
-              </div>
-            </div>
+            
             <div className="flex flex-wrap gap-[10px] w-full items-center justify-center">
-            {/* <Card className="bg-[#ee427b]" style={{ width: 370 }}>
+              {/* <Card className="bg-[#ee427b]" style={{ width: 370 }}>
               <p className="text-white">DAILY VISITS</p>
               <p className="text-white font-bold">8,652Card content</p>
               <p className="text-white">2.97% Since last month</p>
@@ -454,16 +405,14 @@ return "4"
               <p className="text-white">8.21% Since last month</p>
             </Card>
       */}
-        </div>
+            </div>
           </div>
 
           {showAddDoctor && <AddDoctor />}
           {showAddPharmacy && <AddPharmacy />}
-          {/* {showPharmacy && <PharmacyData />} */}
-          {/* {showDoctor && <DoctorData />} */}
         </div>
         <div>
-            {showPharmacy && <PharmacyData />}
+          {ShowAllPharmacie && <ShowPharmacies />}
           {showDoctor && <DoctorData />}
         </div>
       </Layout>

@@ -23,57 +23,73 @@ const AddDoctor = () => {
     reader.addEventListener("load", () => callback(reader.result));
     reader.readAsDataURL(img);
   };
+
   const beforeUpload = (file) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+
     if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
+      message.error("You can only upload JPG/PNG files!");
+      return false;
     }
+
     const isLt2M = file.size / 1024 / 1024 < 2;
+
     if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
+      message.error("Image must be smaller than 2MB!");
+      return false;
     }
-    return isJpgOrPng && isLt2M;
+
+    return true;
   };
   const onFinish = async (values) => {
+    setLoading(true);
     console.log(values);
+
     try {
-      const requestBody = {
-        emailAddress: values.emailAddress,
-        password: values.password,
-        userName: values.username,
-        noOfExperience: parseInt(values.noOfExperience, 10),
-        specialization: values.specialization,
-        age: values.age,
-        userRole: values.userRole,
-        gender: values.gender,
-        profileImage: values.upload[0]?.response?.data?.url,
-        affiliationNo: values.affiliationNo,
-        doctorCategories:values.doctorCategories
-      };
+      const formData = new FormData();
+
+      formData.append("emailAddress", values.emailAddress);
+      formData.append("password", values.password);
+      formData.append("userName", values.username);
+      formData.append("noOfExperience", parseInt(values.noOfExperience, 10));
+      formData.append("specialization", values.specialization);
+      formData.append("age", values.age);
+      formData.append("userRole", values.userRole);
+      formData.append("gender", values.gender);
+      formData.append("affiliationNo", values.affiliationNo);
+      formData.append("doctorCategories", values.doctorCategories);
+
+      if (values.upload && values.upload.length > 0) {
+        formData.append("profileImage", values.upload[0].originFileObj);
+      }
+
       const token = "591|6874p2sbrm0NzgpDtJEq7i5ACngx2L9rYunpwkSvb0af41a5";
+
       const response = await fetch(
         "https://mymedjournal.blownclouds.com/api/users/register",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
+            Accept: "application/json",
           },
-          body: JSON.stringify(requestBody),
+          body: formData,
         }
       );
 
       if (response.ok) {
-        console.log("Doctor registered successfully");
+        message.success("Doctor added successfully");
         setRegistrationSuccessful(true);
         setRegistrationResponse(await response.json());
+        setLoading(false);
       } else {
-        console.error("Doctor registration failed:", response.statusText);
+        message.error("Doctor not added");
         setRegistrationResponse(await response.json());
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error during doctor registration:", error);
+      setLoading(false);
     }
   };
   const onFinishFailed = (errorInfo) => {
@@ -85,10 +101,10 @@ const AddDoctor = () => {
       getBase64(info.file.originFileObj, (url) => {
         setLoading(false);
         setImageUrl(url);
+        console.log("Image URL:", url);
       });
     }
   };
-
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -280,12 +296,15 @@ const AddDoctor = () => {
             <Form.Item
               className="h-[50px]"
               name="upload"
-              valuePropName="value"
+              valuePropName="fileList"
+              getValueFromEvent={(e) => e.fileList}
               extra=" "
-              rules={[{ required: true, message: "Please upload image!" }]}
+              rules={[
+                { required: true, message: "Please upload your doctor image!" },
+              ]}
             >
               <Upload
-                name="avatar"
+                name="upload"
                 listType="picture-card"
                 className="avatar-uploader w-[100%]"
                 showUploadList={false}
@@ -293,7 +312,7 @@ const AddDoctor = () => {
                 beforeUpload={beforeUpload}
                 onChange={handleChange}
               >
-                {imageUrl ? (
+                {imageUrl && typeof imageUrl === "string" ? (
                   <Image width={100} height={100} src={imageUrl} alt="avatar" />
                 ) : (
                   uploadButton
@@ -308,11 +327,12 @@ const AddDoctor = () => {
                     handleCancel();
                   }}
                 >
-                  cencel
+                  Cancel
                 </Button>
               </Form.Item>
               <Form.Item>
                 <Button
+                  loading={loading}
                   className="bg-[#1b70a8] w-[150px] !text-white"
                   htmlType="submit"
                 >
