@@ -124,7 +124,7 @@ const AddDoctor = () => {
       {isRegistrationSuccessful ? (
         <DoctorData />
       ) : (
-        <div className=" border  bg-[#fff] w-[92%] mx-auto rounded-[10px] mb-[20px]">
+        <div className="border bg-[#fff] w-[92%] mx-auto rounded-[10px] mt-[40px] mb-[20px]">
           <div className="bg-[#1b70a8] justify-between flex items-center h-[100px] mb-[20px] rounded-t-[10px] w-[100%]">
             <h1 className="text-white font-bold text-[24px] ml-[20px]">
               Add Doctor

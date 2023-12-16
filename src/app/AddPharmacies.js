@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import React, { useState } from "react";
 
+
 const AddPharmacies = () => {
   const [imageUrl, setImageUrl] = useState([]);
   const [loading, setLoading] = useState(false);

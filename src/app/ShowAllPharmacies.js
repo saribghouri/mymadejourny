@@ -7,20 +7,17 @@ import React, { useEffect, useState } from "react";
 
 import Cookies from "js-cookie";
 import Image from "next/image";
-const ShowPharmacies = () => {
+const ShowAllPharmacies = () => {
   const [searchText, setSearchText] = useState("");
-
-  const API_URL =
-    "https://mymedjournal.blownclouds.com/api/web/fatch/Pharmacies";
+  const API_URL = "https://mymedjournal.blownclouds.com/api/Pharmacies";
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [pharmacies, setpharmacies] = useState([]);
   const [visible, setVisible] = useState(false);
   const [editingpharmacie, setEditingpharmacie] = useState(null);
-  console.log("pharmacies",pharmacies)
   const filteredPharmacies = pharmacies.filter((pharmacy) =>
-    pharmacy.pharmacieName.toLowerCase().includes(searchText.toLowerCase())
-  );
+  pharmacy.pharmacieName.toLowerCase().includes(searchText.toLowerCase())
+);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,6 +44,7 @@ const ShowPharmacies = () => {
 
     fetchData();
   }, []);
+
   const pharmacie = pharmacies.map((pharmacie) => ({
     key: pharmacie.id ? pharmacie.id.toString() : "",
     id: pharmacie.id || "",
@@ -55,7 +53,8 @@ const ShowPharmacies = () => {
     pharmacieDetail: pharmacie.pharmacieDetail || "",
     userId: pharmacie.userId || "",
   }));
-
+  
+  console.log("data", pharmacie);
   console.log("data", pharmacie);
   const handleAdd = () => {
     setEditingpharmacie(null);
@@ -75,7 +74,7 @@ const ShowPharmacies = () => {
     try {
       const token = Cookies.get("apiToken");
       const response = await fetch(
-        `https://mymedjournal.blownclouds.com/api/Pharmacies/${id}`,
+        `https://mymedjournal.blownclouds.com/api/Pharmacies`,
         {
           method: "DELETE",
           headers: {
@@ -99,10 +98,9 @@ const ShowPharmacies = () => {
     }
   };
 
-
   const handleCancel = () => {
     setVisible(false);
-    fetchData(); 
+    fetchData();
   };
 
   const handleSave = async (values) => {
@@ -111,7 +109,6 @@ const ShowPharmacies = () => {
       let response;
 
       if (editingpharmacie) {
-     
         response = await fetch(
           `https://mymedjournal.blownclouds.com/api/Pharmacies/${values.id}`,
           {
@@ -144,8 +141,8 @@ const ShowPharmacies = () => {
               pharmacy.id === values.id ? { ...pharmacy, ...values } : pharmacy
             )
           : [...pharmacies, data];
-      
-        setpharmacies(updatedPharmacies);  
+
+        setpharmacies(updatedPharmacies);
         form.resetFields();
         setVisible(false);
       } else {
@@ -200,7 +197,6 @@ const ShowPharmacies = () => {
               Delete
             </Button>
           </Popconfirm>
-         
         </span>
       ),
     },
@@ -209,7 +205,7 @@ const ShowPharmacies = () => {
   return (
     <div>
       <div className="flex justify-between pl-[10px] pr-[10px] items-center mt-[10px] mb-[20px]">
-        <h1>pharmacy</h1>
+        <h1>pharmacies</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Input search text"
@@ -218,7 +214,6 @@ const ShowPharmacies = () => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-
       {loading ? (
         <Spin
           className="flex justify-center w-[100%] h-[200px] items-center"
@@ -267,4 +262,4 @@ const ShowPharmacies = () => {
   );
 };
 
-export default ShowPharmacies;
+export default ShowAllPharmacies;
