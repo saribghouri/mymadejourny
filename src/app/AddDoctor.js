@@ -5,7 +5,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, Select, Upload } from "antd";
-
+import Cookies from "js-cookie";
 import React, { useState } from "react";
 import Image from "next/image";
 import DoctorData from "./DoctorData";
@@ -63,7 +63,7 @@ const AddDoctor = () => {
         formData.append("profileImage", values.upload[0].originFileObj);
       }
 
-      const token = "591|6874p2sbrm0NzgpDtJEq7i5ACngx2L9rYunpwkSvb0af41a5";
+      const token = Cookies.get("apiToken");
 
       const response = await fetch(
         "https://mymedjournal.blownclouds.com/api/users/register",

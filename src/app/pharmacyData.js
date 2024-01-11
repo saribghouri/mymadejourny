@@ -1,19 +1,10 @@
 import {
-  ConsoleSqlOutlined,
+  DeleteOutlined,
+  EditOutlined,
   LoadingOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import {
-  Alert,
-  Button,
-  Divider,
-  Form,
-  Input,
-  Modal,
-  Popconfirm,
-  Spin,
-  Table,
-} from "antd";
+import { Button, Form, Input, Modal, Spin, Table, message } from "antd";
 
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -21,13 +12,16 @@ const PharmacyData = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [Pharmacies, setPharmacies] = useState([]);
-  const [visible, setVisible] = useState(false);
-  const [editingDoctor, setEditingDoctor] = useState(null);
+
+  const [selectedPharmacy, setSelectedPharmacy] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
 
-  const filteredPharmacies = Pharmacies.filter((pharmacy) =>
-  pharmacy.userName.toLowerCase().includes(searchText.toLowerCase())
-);
+  const filteredPharmacies = Pharmacies
+    ? Pharmacies.filter((pharmacy) =>
+        pharmacy.userName.toLowerCase().includes(searchText.toLowerCase())
+      )
+    : [];
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,21 +35,17 @@ const PharmacyData = () => {
             },
           }
         );
-        0.0;
-        0.0;
-        0.0;
-        0.0;
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Doctors fetched successfully:", data);
-      
+
+          console.log("Pharmacies fetched successfully:", data);
           setPharmacies(data.all_pharmacies);
         } else {
-          console.error("Failed to fetch doctors");
+          console.error("Failed to fetch pharmacies. Status:", response.status);
         }
       } catch (error) {
-        console.error("Error fetching doctors:", error);
+        console.error("Error fetching pharmacies:", error);
       } finally {
         setLoading(false);
       }
@@ -64,118 +54,121 @@ const PharmacyData = () => {
     fetchData();
   }, []);
 
-  const datas = Array.isArray(Pharmacies)
-    ? Pharmacies.map((Pharmacies) => ({
-        key: Pharmacies.id.toString(),
-        id: Pharmacies.id,
-        userRole: Pharmacies.userRole,
-        doctorCategories: Pharmacies.doctorCategories,
-        userName: Pharmacies.userName,
-        emailAddress: Pharmacies.emailAddress,
-      }))
-    : [];
-  console.log("data", datas);
-  const handleAdd = () => {
-    setEditingDoctor(null);
-    form.resetFields();
-    setVisible(true);
-  };
-
-  const handleEdit = (id) => {
-    const PharmaciesToEdit = Pharmacies.find((Pharmacies) => Pharmacies.id === id);
-    setEditingDoctor(PharmaciesToEdit);
-    form.setFieldsValue(PharmaciesToEdit);
-    setVisible(true);
-  };
-
-  const handleDelete = async (id) => {
+  const handleDelete = async (userId) => {
     try {
-      // Perform the API call to delete the doctor with the given ID
-      // ...
-
-      // Update the state after successful deletion
-      const updatedPharmacies = Pharmacies.filter((Pharmacies) => Pharmacies.id !== id);
-      setDoctors(updatedPharmacies);
-    } catch (error) {
-      console.error("Error deleting doctor:", error);
-    }
-  };
-
-  const handleStatusChange = async (id, newStatus) => {
-    try {
-      // Perform the API call to update the status of the doctor with the given ID
-      // ...
-
-      // Update the state after successful status change
-      const updatedPharmacies = Pharmacies.map((Pharmacies) =>
-      Pharmacies.id === id ? { ...Pharmacies, status: newStatus } : doctor
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        `https://mymedjournal.blownclouds.com/api/delete-user/${userId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
-      setDoctors(updatedPharmacies);
-    } catch (error) {
-      console.error("Error changing doctor status:", error);
-    }
-  };
 
-  const handleCancel = () => {
-    setVisible(false);
-  };
+      if (response.ok) {
+        
+        message.success("pharmacy delete successfully");
 
-  const handleSave = async (values) => {
-    try {
-      // Perform the API call to save or update the doctor
-      // ...
-
-      // Update the state after successful save or update
-      const updatedPharmacies = [...Pharmacies];
-      const index = updatedPharmacies.findIndex(
-        (Pharmacies) => Pharmacies.id === values.id
-      );
-      if (index === 1) {
-        updatedPharmacies[index] = values;
+        setPharmacies((prevPharmacies) =>
+          prevPharmacies.filter((pharmacy) => pharmacy.id !== userId)
+        );
       } else {
-        updatedPharmacies.push(values);
+        console.error("Failed to delete user");
       }
-      setDoctors(updatedPharmacies);
-
-      setVisible(false);
     } catch (error) {
-      console.error("Error saving doctor:", error);
+      console.error("Error deleting user:", error);
     }
   };
+
   const columns = [
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
     {
-      title: "Actions",
-      dataIndex: "actions",
-      key: "actions",
-      render: (_, record) => (
-        <span className="flex gap-[10px]">
-          <Button
-            className="bg-[#1d8dd8] !text-[#fff] "
-            onClick={() => handleEdit(record.id)}
-          >
-            Edit
-          </Button>
-          <Popconfirm
-            title="Are you sure you want to delete this doctor?"
-            onConfirm={() => handleDelete(record.id)}
-          >
-            <Button className="bg-[#751010] !text-[#fff] " type="danger">
-              Delete
-            </Button>
-          </Popconfirm>
-         
-        </span>
+      title: "Status",
+      dataIndex: "isActives",
+      key: "isActives",
+      render: (isActives, record) => (
+        <span>{isActives === "1" ? "Active" : "inacitve"}</span>
+      ),
+    },
+    {
+      title: "Approval",
+      dataIndex: "isAprovel",
+      key: "isAprovel",
+      render: (isAprovel, record) => (
+        <>
+          <span className={isAprovel === "1" ? "accept" : "reject"}>
+            {isAprovel === "1" ? "Accept" : "Reject"}
+          </span>
+        </>
+      ),
+    },
+    {
+      title: "Delete",
+      dataIndex: "id",
+      key: "delete",
+      render: (id) => (
+        <DeleteOutlined className="text-[#990e0e] ml-[10px]" type="link" danger onClick={() => handleDelete(record.id)}/>
+
+      ),
+    },
+
+    {
+      title: "Edit",
+      dataIndex: "id",
+      key: "edit",
+      render: (id, record) => (
+        <EditOutlined type="link" onClick={() => handleEdit(record)} />
       ),
     },
   ];
+  const handleEdit = (doctor) => {
+    setSelectedPharmacy(doctor);
+    setIsModalVisible(true);
+  };
+
+  const handleSave = async (values) => {
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        `https://mymedjournal.blownclouds.com/api/users/edituser`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(values),
+        }
+      );
+
+      if (response.ok) {
+        console.log("User edited successfully");
+        setPharmacies((prevDoctors) =>
+          prevDoctors.map((doctor) =>
+            doctor.id === selectedPharmacy.id
+              ? { ...doctor, ...values }
+              : doctor
+          )
+        );
+      } else {
+        console.error("Failed to edit user");
+      }
+    } catch (error) {
+      console.error("Error editing user:", error);
+    } finally {
+      setIsModalVisible(false);
+    }
+  };
 
   return (
     <div>
-      <div className="flex justify-between pl-[10px] pr-[10px] items-center mt-[10px] mb-[20px]">
-        <h1>Register Pharmacy</h1>
+      <div className="flex justify-between pl-[20px] pr-[20px] items-center mt-[20px] mb-[20px]">
+        <h1 className="Register-Pharmacy">Register Pharmacy</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Input search text"
@@ -184,7 +177,7 @@ const PharmacyData = () => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      {loading ? (
+      {/* {loading ? (
         <Spin
           className="flex justify-center w-[100%] h-[200px] items-center"
           indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
@@ -197,34 +190,84 @@ const PharmacyData = () => {
             key: Pharmacies.id,
           }))}
         />
+      )} */}
+
+      {Pharmacies && Pharmacies.length > 0 ? (
+        <Table
+          columns={columns}
+          dataSource={filteredPharmacies.map((Pharmacies) => ({
+            ...Pharmacies,
+            key: Pharmacies.id,
+          }))}
+        />
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={filteredPharmacies.map((Pharmacies) => ({
+            ...Pharmacies,
+            key: Pharmacies.id,
+          }))}
+        />
       )}
+
       <Modal
-        title={editingDoctor ? "Edit Doctor" : "Add Doctor"}
-        visible={visible}
-        onCancel={handleCancel}
-        onOk={form.submit}
+        open={isModalVisible}
+        title="Edit Pharmacy"
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+        className="custom-modal"
       >
-        <Form form={form} onFinish={handleSave} initialValues={editingDoctor}>
-          <Form.Item name="id" hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="userName"
-            label="User Name"
-            rules={[{ required: true, message: "Please enter user name" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="emailAddress"
-            label="Email Address"
-            rules={[{ required: true, message: "Please enter email address" }]}
-          >
-            <Input />
-          </Form.Item>
-        </Form>
+        <EditUserForm doctor={selectedPharmacy} onSave={handleSave} />
       </Modal>
     </div>
+  );
+};
+const EditUserForm = ({ doctor, onSave }) => {
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(doctor);
+  }, [doctor, form]);
+
+  return (
+    <Form form={form} layout="vertical" onFinish={(values) => onSave(values)}>
+      <label className="mb-[5px] font-semi-bold text-[#868585]">UserName</label>
+      <Form.Item name="userName" rules={[{ required: true }]}>
+        <Input className="border" placeholder="userName" />
+      </Form.Item>
+      <label className="mb-[5px] font-semi-bold text-[#868585]">
+        AffiliationNo
+      </label>
+      <Form.Item name="affiliationNo" rules={[{ required: true }]}>
+        <Input className="border" placeholder="affiliationNo" />
+      </Form.Item>
+      <label className="mb-[5px] font-semi-bold text-[#868585]">
+        Experience
+      </label>
+      <Form.Item name="noOfExperience" rules={[{ required: true }]}>
+        <Input className="border" placeholder="noOfExperience" />
+      </Form.Item>
+      <label className="mb-[5px] font-semi-bold text-[#868585]">
+        Specialization
+      </label>
+      <Form.Item name="specialization" rules={[{ required: true }]}>
+        <Input className="border" placeholder="specialization" />
+      </Form.Item>
+      <label className="mb-[5px] font-semi-bold text-[#868585]">Age</label>
+      <Form.Item name="age" rules={[{ required: true }]}>
+        <Input className="border" placeholder="age" />
+      </Form.Item>
+      <label className="mb-[5px] font-semi-bold text-[#868585]">Gender</label>
+      <Form.Item name="gender" rules={[{ required: true }]}>
+        <Input className="border" placeholder="gender" />
+      </Form.Item>
+
+      <Form.Item>
+        <Button className="bg-[#2361dd] text-white" htmlType="submit">
+          Save
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

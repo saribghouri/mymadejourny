@@ -4,10 +4,11 @@ import { useRouter } from "next/navigation";
 import Link from "antd/es/typography/Link";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import Image from "next/image";
 import Cookies from "js-cookie";
 const Login = () => {
   console.log("Cookies", Cookies);
-  const [userData, setUserData] = useState(null);
+
   const router = useRouter();
 
   const onFinish = async (values) => {
@@ -34,9 +35,7 @@ const Login = () => {
         console.log("API response:", data);
         const cookie = Cookies.set("apiToken", data.access_token);
         console.log(cookie);
-        setUserData(data);
-        localStorage.setItem("data", JSON.stringify(data.user.userName));
-        localStorage.setItem("userRole", JSON.stringify(data.user.userRole));
+
         const { userType } = values;
 
         switch (userType) {
@@ -74,13 +73,33 @@ const Login = () => {
   };
 
   return (
-    <main className="bg-[#f1eeee] flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="bg-[#ffffff]  gap-[40px] rounded-[20px] h-[500px] text-center flex flex-col w-[400px]">
-        <div className="bg-[#1b70a8] rounded-t-[20px] w-[400px] h-[400px] flex items-center justify-center">
+    <main className=" flex min-h-screen flex-row items-center justify-between ">
+ <div 
+    className=" bg-cover w-[100%] h-[712px] rounded-tr-[10px] rounded-br-[10px] absolute top-0 left-0"
+    style={{ 
+     
+    }}>
+
+<div className="bg-[#2361dd] w-[50%] h-[712px] rounded-tr-[10px] rounded-br-[10px] relative" style={{ backgroundImage: `url("/assserts/images/bg.jpg")`, backgroundSize: 'cover', backgroundPosition: 'center',  }}></div>
+  
+</div>
+<h1 className="text-white text-center flex justify-center items-center h-[700px]">
+    <Image
+      width={400}
+      height={400}
+      alt=""
+      className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2"
+      src="/assserts/images/logo-white.png"
+    />
+  </h1>
+      <div className="bg-[#d8e4f5] shadow-[rgba(0,0,0,0.1)] gap-[20px] rounded-[20px] h-[500px] text-center flex flex-col w-[400px] mr-[40px]">
+       
+       
+        <div className="bg-[#2361dd] rounded-t-[20px] w-[400px] h-[400px] flex items-center justify-center">
           <h1 className="text-[30px] font-bold text-white"> Login</h1>
         </div>
 
-        <div className=" p-6 gap-[40px] rounded-[20px] h-[500px] text-center flex flex-col w-[300px] mx-auto">
+        <div className=" p-6 gap-[40px] rounded-[20px] h-[500px] text-center flex flex-col w-[330px] mx-auto">
           <Form
             name="loginForm"
             initialValues={{ remember: true }}
@@ -101,7 +120,7 @@ const Login = () => {
               ]}
             >
               <Input
-                className="h-[40px] border"
+                className="h-[40px] border "
                 prefix={<UserOutlined />}
                 placeholder="Email"
               />
@@ -115,7 +134,7 @@ const Login = () => {
             >
               <Input.Password
                 type="umber"
-                className="h-[40px] border"
+                className="h-[40px] border mb-[-15px]"
                 prefix={<LockOutlined />}
                 placeholder="Password"
               />
@@ -144,7 +163,7 @@ const Login = () => {
             <Form.Item>
               <Button
                 htmlType="submit"
-                className={`bg-[#1b70a8] w-[250px] h-[40px] !text-white text-[18px] text-center ${
+                className={`bg-[#2361dd] w-full h-[40px] !text-white text-[18px] text-center ${
                   loading ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 onClick={() => {

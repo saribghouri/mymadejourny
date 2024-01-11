@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Layout,
   Menu,
@@ -10,55 +10,139 @@ import {
   Space,
   Modal,
   Form,
-  Upload,
   message,
+  Upload,
 } from "antd";
 import Link from "antd/es/typography/Link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   BookOutlined,
-  ContainerOutlined,
   CustomerServiceOutlined,
   DashboardOutlined,
-  DeploymentUnitOutlined,
   DownOutlined,
-  InfoOutlined,
-  LayoutOutlined,
+  LoadingOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  PieChartOutlined,
   PlusOutlined,
-  SearchOutlined,
-  SettingOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-
-import AddDoctor from "../AddDoctor";
 import DoctorData from "../DoctorData";
-import AddPharmacy from "../AddPharmacy";
-
 import ShowPharmacies from "../ShowPharmacies";
 import Cookies from "js-cookie";
-import PharmacyData from "../pharmacyData";
 import ShowAllPharmacies from "../ShowAllPharmacies";
+import AddAppointment from "../AddAppointment";
+import RequestDoctor from "../RequestDoctor";
+import RequestPharmacy from "../RequestPharmacy";
+import ActiveDoctors from "../ActiveDoctors";
+import PharmacyData from "../pharmacyData";
+import ActivePharmacy from "../ActivePharmacy";
+import Appointments from "../Appointments";
+import AddCategories from "../AddCategories";
+import ShowCategories from "../ShowCategories";
 
 const { Header, Sider } = Layout;
 
 const App = () => {
-  const [showAddDoctor, setShowAddDoctor] = useState(false);
-  const [showAddPharmacy, setShowAddPharmacy] = useState(false);
+  const router = useRouter();
+
   const [showPharmacy, setShowPharmacy] = useState(false);
+  const [showActivePharmacy, setShowActivePharmacy] = useState(false);
   const [ShowPharmacie, setShowPharmacies] = useState(false);
   const [allPharmacies, setAllPharmacies] = useState(false);
+  const [requestDoctor, setRequestDoctor] = useState(false);
+  const [activeDoctor, setActiveDoctor] = useState(false);
+  const [categories, setCategories] = useState(false);
+  const [requestPharmacie, setRequestPharmacy] = useState(false);
   const [showDoctor, setShowDoctor] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState([]);
+  const [appointment, setAppointment] = useState(false);
+  const [showCategories, setShowCategories] = useState(false);
+  const [appointments, setAppointments] = useState(false);
+  const [userDetails, setUserDetails] = useState([]);
+  const [showProfileEditModal, setShowProfileEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [imageUrl, setImageUrl] = useState();
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const [forceRerender, setForceRerender] = useState(false);
+  const [userProfileImage, setUserProfileImage] = useState(
+    userDetails?.profileImage || null
+  );
+  console.log("Affiliation No:", userDetails.affiliationNo);
+  console.log("gender:", userDetails.gender);
+  console.log("specialization:", userDetails.specialization);
+  console.log("age:", userDetails.age);
+  console.log("noOfExperience:", userDetails.noOfExperience);
+  const handleShowProfileEditModal = () => {
+    setShowProfileEditModal(true);
+  };
+  const handleForgetPassword = async (values) => {
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        "https://mymedjournal.blownclouds.com/api/forget/password",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            password_confirmation: values.confirmPassword,
+            oldPassword: values.oldPassword,
+            password: values.newPassword,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        message.success("Password reset link sent successfully");
+
+        setShowChangePasswordModal(false);
+      } else {
+        message.error("Failed to send password reset link");
+        console.log("Response:", response);
+      }
+    } catch (error) {
+      console.error("Error during forget password:", error);
+    }
+  };
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const token = Cookies.get("apiToken");
+        const response = await fetch(
+          "https://mymedjournal.blownclouds.com/api/user/details",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setUserDetails(data.user_details[0]);
+          setForceRerender((prev) => !prev);
+        } else {
+          console.error(
+            "Failed to fetch user details:",
+            response.status,
+            response.statusText
+          );
+        }
+      } catch (error) {
+        console.error("Error during fetching user details:", error.message);
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
+
   const handleShowChangePasswordModal = () => {
     setShowChangePasswordModal(true);
   };
@@ -66,125 +150,161 @@ const App = () => {
   const handleCloseChangePasswordModal = () => {
     setShowChangePasswordModal(false);
   };
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  const handleShowPharmacyData = () => {
-    setShowPharmacy(true);
-    setShowPharmacies(false);
-    setShowAddDoctor(false);
-    setShowAddPharmacy(false);
-    setShowDoctor(false);
-    setAllPharmacies(false);
-  };
-  const handleShowAllPharmacies = () => {
-    setAllPharmacies(true);
-    setShowPharmacy(false);
-    setShowPharmacies(false);
-    setShowAddDoctor(false);
-    setShowAddPharmacy(false);
-    setShowDoctor(false);
-  };
   const handleShowPharmacies = () => {
     setShowPharmacies(true);
     setAllPharmacies(false);
+    setShowCategories(false);
     setShowPharmacy(false);
-    setShowAddDoctor(false);
-    setShowAddPharmacy(false);
+    setActiveDoctor(false);
+    setShowDoctor(false);
+    setAppointments(false);
+    setRequestPharmacy(false);
+    setRequestDoctor(false);
+    setAppointment(false);
+    setShowDoctor(false);
+    setShowActivePharmacy(false);
+  };
+  const handleShowPharmacy = () => {
+    setShowPharmacy(true);
+    setRequestDoctor(false);
+    setShowPharmacies(false);
+    setShowCategories(false);
+    setAllPharmacies(false);
+    setShowActivePharmacy(false);
+    setRequestPharmacy(false);
+    setActiveDoctor(false);
     setShowDoctor(false);
   };
 
   const handleShowDoctorData = () => {
     setShowDoctor(true);
     setAllPharmacies(false);
+    setShowCategories(false);
     setShowPharmacy(false);
     setShowPharmacies(false);
-    setShowAddDoctor(false);
-    setShowAddPharmacy(false);
+    setRequestDoctor(false);
+    setRequestPharmacy(false);
+    setActiveDoctor(false);
+    setActiveDoctor(false);
+    setShowActivePharmacy(false);
+    setCategories(false);
   };
-  const handleAddPharmacy = () => {
-    setShowAddPharmacy(true)
+  const handleShowActiveDoctor = () => {
+    setActiveDoctor(true);
+    setShowCategories(false);
+    setShowDoctor(false);
+    setCategories(false);
+    setAllPharmacies(false);
+    setShowPharmacy(false);
+    setShowPharmacies(false);
+    setRequestDoctor(false);
+    setRequestPharmacy(false);
+    setShowActivePharmacy(false);
+  };
+  const handleShowActivePharmacy = () => {
+    setShowActivePharmacy(true);
+    setActiveDoctor(false);
+    setShowDoctor(false);
+    setShowCategories(false);
+    setAllPharmacies(false);
+    setShowPharmacy(false);
+    setShowPharmacies(false);
+    setRequestDoctor(false);
+    setCategories(false);
+    setRequestPharmacy(false);
+  };
+
+  const handleAppointment = () => {
+    setAppointment(true);
+    setShowDoctor(false);
+    setShowCategories(false);
+    setAllPharmacies(false);
+    setShowPharmacy(false);
+    setShowPharmacies(false);
+    setRequestDoctor(false);
+    setRequestPharmacy(false);
+    setCategories(false);
+    setActiveDoctor(false);
+    setAppointments(false);
+  };
+  const handleDocRequest = () => {
+    setRequestDoctor(true);
+    setShowCategories(false);
+    setAppointment(false);
     setShowDoctor(false);
     setAllPharmacies(false);
     setShowPharmacy(false);
     setShowPharmacies(false);
-    setShowAddDoctor(false);
-    // setShowAddPharmacy(false);
+    setRequestPharmacy(false);
+    setActiveDoctor(false);
+    setCategories(false);
+    setShowActivePharmacy(false);
   };
-
-  const handleClick = (component) => {
-    setShowAddDoctor(false);
-    setShowAddPharmacy(false);
-    setShowPharmacy(false);
+  const handlePharmRequest = () => {
+    setRequestPharmacy(true);
+    setRequestDoctor(false);
+    setShowCategories(false);
+    setAppointment(false);
     setShowDoctor(false);
-
-    if (component === "doctor") {
-      setShowAddDoctor(true);
-    } else if (component === "pharmacy") {
-      setShowAddPharmacy(true);
-    }
+    setAllPharmacies(false);
+    setShowPharmacy(false);
+    setShowPharmacies(false);
+    setCategories(false);
+    setActiveDoctor(false);
+    setShowActivePharmacy(false);
   };
-  const onFinish = async (values) => {
-    console.log(values);
-    try {
-      const token = Cookies.get("apiToken");
-      const formData = new FormData();
-      formData.append("pharmacieName", values.pharmacieName);
-      formData.append("pharmacieDetail", values.pharmacieDetail);
-      formData.append("pharmacieImage", values.upload[0]?.originFileObj);
-
-      const response = await fetch(
-        "https://mymedjournal.blownclouds.com/api/Pharmacies",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }
-      );
-
-      if (response.ok) {
-        message.success("Pharmacie added successfully");
-        setLoading(false);
-
-        setShowAllPharmacies(true);
-        setShowPharmacy(false);
-        setShowAddDoctor(false);
-        setShowAddPharmacy(false);
-        setShowDoctor(false);
-
-        handleOk();
-      } else {
-        message.error("Pharmacie not added");
-        console.log("Response:", response);
-      }
-    } catch (error) {
-      console.error("Error during adding pharmacy:", error);
-    }
+  const handleCategories = () => {
+    setCategories(true);
+    setAppointments(false);
+    setRequestPharmacy(false);
+    setRequestDoctor(false);
+    setAppointment(false);
+    setShowDoctor(false);
+    setAllPharmacies(false);
+    setShowPharmacy(false);
+    setShowPharmacies(false);
+    setActiveDoctor(false);
+    setShowCategories(false);
+    setShowActivePharmacy(false);
   };
+  const handleShowCategories = () => {
+    setShowCategories(true);
+    setAppointments(false);
+    setCategories(false);
+    setRequestPharmacy(false);
+    setRequestDoctor(false);
+    setAppointment(false);
+    setShowDoctor(false);
+    setAllPharmacies(false);
+    setShowPharmacy(false);
+    setShowPharmacies(false);
+    setActiveDoctor(false);
+    setShowActivePharmacy(false);
+  };
+  const handleAppointments = () => {
+    setAppointments(true);
+    setCategories(false);
+    setRequestPharmacy(false);
+    setRequestDoctor(false);
+    setAppointment(false);
+    setShowDoctor(false);
+    setAllPharmacies(false);
+    setShowPharmacy(false);
+    setShowPharmacies(false);
+    setActiveDoctor(false);
+    setShowActivePharmacy(false);
+  };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-  const userName = localStorage.getItem("data");
-  const userId = localStorage.getItem("userRole");
-  console.log(userId);
-  const cleanedUserName = userName.replace(/"/g, "");
-
-  console.log("qaebqeb", cleanedUserName);
-
-  const router = useRouter();
-
   const [collapsed, setCollapsed] = useState(false);
+  const handleCollapse = (collapsed) => {
+    setCollapsed(collapsed);
+
+    setShowMenu(false);
+  };
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -197,122 +317,107 @@ const App = () => {
       onClick,
     };
   }
-  const handleclick = () => {
-    setLoading(true);
-  };
-  const getUserRole = () => {
-    const userName = localStorage.getItem("data");
-    const cleanedUserName =
-      userName !== null ? userName.replace(/"/g, "") : userName;
-
-    const userId = localStorage.getItem("userRole");
-    console.log("userId", userId);
-
-    if (cleanedUserName.includes("admin")) {
-      return "1";
-    } else if (cleanedUserName.includes("doctor")) {
-      return "3";
-    } else if (cleanedUserName.includes("pharmacy")) {
-      return "4";
-    } else if (userId.includes("3")) {
-      return "3";
-    } else if (userId.includes("4")) {
-      return "4";
-    }
-  };
-
   const generateMenuItems = () => {
-    const userRole = getUserRole();
-
-    if (userRole === "1") {
+    if (userDetails.userRole === "1") {
       console.log("sabgqebew");
       return [
-        getItem("Dashboard ", "1", <DashboardOutlined />),
-        getItem("Pages", "sub1", <BookOutlined />, [
-          getItem("Tom", "1"),
-          getItem("Bill", "2"),
-          getItem("Alex", "3"),
-        ]),
-        getItem("Doctor", "sub2", <TeamOutlined />, [
+        getItem("Dashboard ", <DashboardOutlined />),
+        getItem("Request's", "sub1", <BookOutlined />, [
           getItem(
+            "",
+            "1",
+
+            <>
+              <button onClick={handlePharmRequest}> Pharmacy Request</button>
+            </>
+          ),
+          getItem(
+            " ",
+            "2",
+            <>
+              <button onClick={handleDocRequest}> Doctor Request</button>
+            </>
+          ),
+        ]),
+        getItem("Doctor", "sub25", <TeamOutlined />, [
+          getItem(
+            "",
+            "sub41",
             <>
               <button onClick={handleShowDoctorData}> Show Doctors</button>
             </>
           ),
+        ]),
+        getItem(" Active Doctor", "sub26", <TeamOutlined />, [
           getItem(
+            "",
+            "sub42",
             <>
-              <button onClick={() => handleClick("doctor")}> Add Doctor</button>
+              <button onClick={handleShowActiveDoctor}> Active Doctors</button>
             </>
           ),
         ]),
-        getItem("Pharmacy", "sub", <TeamOutlined />, [
+        getItem(" Pharmacy ", "sub27", <TeamOutlined />, [
           getItem(
+            "",
+            "sub43",
             <>
-              <button onClick={handleShowPharmacyData}>Show Pharmacy</button>
+              <button onClick={handleShowPharmacy}>Show Pharmacy</button>
             </>
           ),
+        ]),
+        getItem("Active Pharmacy ", "sub28", <TeamOutlined />, [
           getItem(
+            "",
+            "sub48",
             <>
-              <button onClick={handleShowAllPharmacies}>Show Pharmacies</button>
-            </>
-          ),
-          getItem(
-            <>
-              <button onClick={handleAddPharmacy}>
-                {" "}
-                Add Pharmacy
+              <button onClick={handleShowActivePharmacy}>
+                Active Pharmacy
               </button>
             </>
           ),
         ]),
-        getItem("Layout", "20", <LayoutOutlined />),
-        getItem("Components"),
-        getItem("Basic UI", "sub3", <ContainerOutlined />, [
-          getItem("Tom", "5"),
-          getItem("Bill", "6"),
-          getItem("Alex", "7"),
-        ]),
-        getItem("Extended UI", "sub4", <DeploymentUnitOutlined />, [
-          getItem("Tom", "8"),
-          getItem("Bill", "9"),
-          getItem("Alex", "10"),
-        ]),
-        getItem("Icons", "sub5", <InfoOutlined />, [
-          getItem("Tom", "11"),
-          getItem("Bill", "12"),
-          getItem("Alex", "13"),
-        ]),
-        getItem("Chart ", "sub6", <PieChartOutlined />, [
-          getItem("Tom", "14"),
-          getItem("Bill", "15"),
-          getItem("Alex", "16"),
+        getItem("categories ", "sub29", <TeamOutlined />, [
+          getItem(
+            "",
+            "sub44",
+            <>
+              <button onClick={handleCategories}>Add categories</button>
+            </>
+          ),
+          getItem(
+            "",
+            "sub45",
+            <>
+              <button onClick={handleShowCategories}>Show categories</button>
+            </>
+          ),
         ]),
       ];
-    } else if (userRole === "3") {
+    } else if (userDetails.userRole === "3") {
       return [
         getItem("Dashboard ", "1", <DashboardOutlined />),
         getItem("doctordata", "sub14", <TeamOutlined />, [
           getItem(
+            "",
+            "sub46",
             <>
-              <a>Add appointment</a>
+              <a onClick={handleAppointment}>Add appointment</a>
             </>
           ),
           getItem(
+            "",
+            "sub47",
             <>
-              <a>Show ap</a>
+              <a onClick={handleAppointments}>Show appointment</a>
             </>
           ),
         ]),
       ];
-    } else if (userRole === "4") {
+    } else if (userDetails.userRole === "4") {
       return [
         getItem("Dashboard ", "1", <DashboardOutlined />),
         getItem("pharmacy", "sub2", <TeamOutlined />, [
-          getItem(
-            <>
-              <button onClick={showModal}> Add Pharmacies</button>
-            </>
-          ),
           getItem(
             <>
               <button onClick={handleShowPharmacies}> Show Pharmacies </button>
@@ -325,29 +430,54 @@ const App = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        "https://mymedjournal.blownclouds.com/api/logout",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        Cookies.remove("apiToken");
+
+        router.push("/");
+
+        message.success(
+          "Logout successful. You have been successfully logged out."
+        );
+      } else {
+        message.error("Logout failed. Failed to logout. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+      message.error(
+        "Logout failed. An error occurred during logout. Please try again."
+      );
+    }
+  };
+
   const item = generateMenuItems();
 
   const items = [
     {
       key: "1",
       label: (
-        <Link to="/account">
-          <UserOutlined /> My Account
-        </Link>
+        <a onClick={handleShowProfileEditModal}>
+          <UserOutlined /> Profile edit
+        </a>
       ),
     },
 
     {
       key: "2",
-
-      label: (
-        <Link to="/account">
-          <SettingOutlined /> Settings
-        </Link>
-      ),
-    },
-    {
-      key: "3",
       label: (
         <Link to="/account">
           <CustomerServiceOutlined /> Change Password
@@ -359,19 +489,13 @@ const App = () => {
       key: "3",
 
       label: (
-        <Link
-          onClick={() => {
-            router.push("/");
-          }}
-          to="/account"
-        >
+        <a onClick={handleLogout}>
           <LogoutOutlined />
           Logout
-        </Link>
+        </a>
       ),
     },
   ];
-
   const getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));
@@ -396,11 +520,21 @@ const App = () => {
     return true;
   };
 
+  const handleChange = (info) => {
+    if (info.file.status === "done") {
+      getBase64(info.file.originFileObj || info.file, (url) => {
+        setLoading(false);
+        setImageUrl(url);
+        setForceRerender((prev) => !prev);
+        console.log("Image URL:", url);
+      });
+    }
+  };
   const uploadButton = (
     <div>
-      {<PlusOutlined />}
+      {loading ? <LoadingOutlined /> : <PlusOutlined />}
       <div
-        className="!w-[100%]"
+        className="w-[100%]"
         style={{
           marginTop: 8,
         }}
@@ -410,113 +544,76 @@ const App = () => {
     </div>
   );
 
-  const handleChange = (info) => {
-    if (info.file.status === "done") {
-      console.log("Upload Response:", info.file.response);
-      getBase64(info.file.originFileObj, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
+  const handleProfileEdit = async (values) => {
+    try {
+      const token = Cookies.get("apiToken");
+      const formData = new FormData();
+      formData.append("userName", values.userName);
+      formData.append("affiliationNo", values.affiliationNo);
+      formData.append("noOfExperience", values.noOfExperience);
+      formData.append("gender", values.gender);
+      formData.append("specialization", values.specialization);
+      formData.append("age", values.age);
+
+      if (values.upload && values.upload.length > 0) {
+        formData.append("profileImage", values.upload[0].originFileObj);
+      }
+
+      const response = await fetch(
+        "https://mymedjournal.blownclouds.com/api/users/edituser",
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        const updatedUserDetails = {
+          ...userDetails,
+          userName: values.userName,
+          affiliationNo: values.affiliationNo,
+          profileImage: data.profileImage || userDetails.profileImage,
+        };
+        setUserDetails(updatedUserDetails);
+        setUserProfileImage(data.profileImage || userDetails.profileImage);
+
+        message.success("Profile updated successfully");
+        setShowProfileEditModal(false);
+        setForceRerender((prev) => !prev);
+
+        handleChange({
+          file: {
+            status: "done",
+            originFileObj: values.upload[0].originFileObj,
+          },
+        });
+      } else {
+        message.error("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error during profile edit:", error);
     }
   };
 
   return (
     <Layout
+      className="rounded-[20px]"
       style={{
         minHeight: "100vh",
       }}
     >
-      <Modal
-        footer={null}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <div>
-          <div className="flex mb-[20px]">
-            <h1 className="text-[24px] font-bold">Add pharmacies</h1>
-          </div>
-          <Form
-            name="loginForm"
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-          >
-            <Form.Item
-              name="pharmacieName"
-              rules={[
-                { required: true, message: "Please enter your pharmacyname!" },
-              ]}
-            >
-              <Input className="h-[40px] border" placeholder="pharmacy name" />
-            </Form.Item>
-            <Form.Item
-              name="pharmacieDetail"
-              rules={[
-                {
-                  required: true,
-                  message: "Please enter your pharmacy detail!",
-                },
-              ]}
-            >
-              <Input
-                className="h-[40px] border"
-                placeholder="pharmacy detail"
-              />
-            </Form.Item>
-
-            <Form.Item
-              className="h-[50px]"
-              name="upload"
-              valuePropName="fileList"
-              getValueFromEvent={(e) => e.fileList}
-              extra=" "
-              rules={[
-                {
-                  required: true,
-                  message: "Please upload your pharmacy image!",
-                },
-              ]}
-            >
-              <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader w-[100%]"
-                showUploadList={false}
-                beforeUpload={beforeUpload}
-                action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                onChange={handleChange}
-              >
-                {imageUrl && typeof imageUrl === "string" ? (
-                  <Image width={100} height={100} src={imageUrl} alt="avatar" />
-                ) : (
-                  uploadButton
-                )}
-              </Upload>
-            </Form.Item>
-
-            <Form.Item className="flex justify-end">
-              <Button
-                loading={loading}
-                htmlType="submit"
-                onOk={handleOk}
-                className={`bg-[#1b70a8] mt-[50px]  justify-end w-full h-[40px] !text-white text-[18px] text-center`}
-                onClick={() => {
-                  handleclick();
-                }}
-              >
-                Add
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
-      </Modal>
-
       <Sider
-        className=""
+        className="!bg-[#2361dd] min-w-[800px] !rounded-[15px] mt-[5px] ml-[5px]"
         collapsible
         collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
+        onCollapse={handleCollapse}
+        trigger
       >
         <div className="p-[30px] text-[22px] ">
           <h1 className="text-white text-center">
@@ -525,7 +622,7 @@ const App = () => {
               height={1000}
               alt=""
               className=""
-              src="/assserts/images/logo.png"
+              src="/assserts/images/logo-white.png"
             />
           </h1>
         </div>
@@ -541,6 +638,7 @@ const App = () => {
 
       <Layout>
         <Header
+          className="!bg-[#2361dd] !rounded-[15px] mt-[5px] ml-[5px] mr-[5px]"
           style={{
             padding: 0,
             background: colorBgContainer,
@@ -558,26 +656,20 @@ const App = () => {
                   height: 64,
                 }}
               />
-              {/* <Input
-                className="w-[300px] rounded-[40px]"
-                placeholder="Input search text"
-                suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
-              /> */}
             </div>
             <div>
               <Modal
                 title="Change Password"
-                visible={showChangePasswordModal}
+                open={showChangePasswordModal}
                 onCancel={handleCloseChangePasswordModal}
                 footer={null}
               >
                 <Form
                   form={form}
                   name="changePasswordForm"
-                  onFinish={onFinish}
+                  onFinish={handleForgetPassword}
                   onFinishFailed={onFinishFailed}
                 >
-                  {/* Add your form fields for old password, new password, confirm password, etc. */}
                   <Form.Item
                     name="oldPassword"
                     rules={[
@@ -630,19 +722,20 @@ const App = () => {
                   </Form.Item>
 
                   <Form.Item>
-                    <Button type="primary" htmlType="submit">
+                    <Button
+                      className="bg-[#2361dd] !text-white"
+                      htmlType="submit"
+                    >
                       Change Password
                     </Button>
                   </Form.Item>
                 </Form>
               </Modal>
               <div className="flex text-center items-center">
-                <Image
-                  width={50}
-                  height={50}
+                <img
                   alt=""
-                  className="w-[50px] h-[50px]"
-                  src="/assserts/images/images.png"
+                  className="w-[30px] h-[30px] rounded-[50%]"
+                  src={imageUrl || userDetails?.profileImage || null}
                 />
                 <Dropdown
                   className="mr-[20px]"
@@ -652,57 +745,213 @@ const App = () => {
                   trigger={["click"]}
                 >
                   <a onClick={(e) => e.preventDefault()}>
-                    <Space className="text-[#39aabe]">
-                      {cleanedUserName}
+                    <Space className="text-[#fff] ml-[10px]">
+                      {userDetails?.userName}
                       <DownOutlined />
                     </Space>
                   </a>
                 </Dropdown>
               </div>
+
+              <Modal
+                title="Edit Profile"
+                open={showProfileEditModal}
+                onCancel={() => setShowProfileEditModal(false)}
+                footer={null}
+              >
+                <Form
+                  form={form}
+                  name="editProfileForm"
+                  initialValues={{
+                    userName: userDetails.userName,
+                    affiliationNo: userDetails.affiliationNo,
+                    specialization: userDetails.specialization,
+                    gender: userDetails.gender,
+                    noOfExperience: userDetails.noOfExperience,
+                    age: userDetails.age,
+                  }}
+                  onFinish={handleProfileEdit}
+                  onFinishFailed={onFinishFailed}
+                >
+                    <Form.Item
+                    className="h-[50px] mb-[80px] w-[100%]"
+                    name="upload"
+                    valuePropName="fileList"
+                    getValueFromEvent={(e) => e.fileList}
+                    extra=" "
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please upload your doctor image!",
+                      },
+                    ]}
+                  >
+                    <Upload
+                      name="upload"
+                      listType="picture-card"
+                      className="avatar-uploader w-[100%]"
+                      showUploadList={false}
+                      action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                      beforeUpload={beforeUpload}
+                      onChange={handleChange}
+                    >
+                      {imageUrl && typeof imageUrl === "string" ? (
+                        <img
+                          alt=""
+                          className="w-[30px] h-[30px] rounded-[50%]"
+                          src={imageUrl}
+                        />
+                      ) : userProfileImage ? (
+                        <img
+                          alt=""
+                          className="w-[30px] h-[30px] rounded-[50%]"
+                          src={userProfileImage}
+                        />
+                      ) : (
+                        uploadButton
+                      )}
+                    </Upload>
+                  </Form.Item>
+                  <Form.Item
+                    name="userName"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter userName",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="User Name" />
+                  </Form.Item>
+                  <Form.Item
+                    name="gender"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter gender",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="gender" />
+                  </Form.Item>
+                  {userDetails.userRole === "3" && (
+                    <>
+                      <Form.Item
+                        name="specialization"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter specialization",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="specialization" />
+                      </Form.Item>
+                     
+                      <Form.Item
+                        name="noOfExperience"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter noOfExperience",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="noOfExperience" />
+                      </Form.Item>
+                      <Form.Item
+                        name="affiliationNo"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter affiliationNo",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="affiliationNo" />
+                      </Form.Item>
+                    </>
+                  )}
+                  {userDetails.userRole === "4" && (
+                    <>
+                      <Form.Item
+                        name="affiliationNo"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter affiliationNo",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="affiliationNo" />
+                      </Form.Item>
+                      <Form.Item
+                        name="age"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter age",
+                          },
+                        ]}
+                      >
+                        <Input placeholder="age" />
+                      </Form.Item>
+                    </>
+                  )}
+              
+                  <Form.Item>
+                    <Button
+                      className="bg-[#2361dd] !text-white"
+                      htmlType="submit"
+                    >
+                      Update Profile
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </Modal>
             </div>
           </div>
         </Header>
 
         <div>
-        
-          <div>
-            {ShowPharmacie && <ShowPharmacies />}
-            
-            <div className="flex flex-wrap gap-[10px] w-full items-center justify-center">
-              {/* <Card className="bg-[#ee427b]" style={{ width: 370 }}>
-              <p className="text-white">DAILY VISITS</p>
-              <p className="text-white font-bold">8,652Card content</p>
-              <p className="text-white">2.97% Since last month</p>
-            </Card>
-            <Card className="bg-[#7657c0]" style={{ width: 370 }}>
-              <p className="text-white">REVENUE</p>
-              <p className="text-white font-bold">$9,254.62</p>
-              <p className="text-white">18.25% Since last month</p>
-            </Card>
-            <Card className="bg-sky-500" style={{ width: 370 }}>
-              <p className="text-white">ORDERS</p>
-              <p className="text-white font-bold">753</p>
-              <p className="text-white">-5.75% Since last month</p>
-            </Card>
-            <Card className="bg-[#2cb6b6]" style={{ width: 370 }}>
-              <p className="text-white">USERS</p>
-              <p className="text-white font-bold">63,154</p>
-              <p className="text-white">8.21% Since last month</p>
-            </Card>
-      */}
-      
-            </div>
-          </div>
+          {ShowPharmacie && <ShowPharmacies />}
 
-          {showAddDoctor && <AddDoctor />}
-          {showAddPharmacy && <AddPharmacy />}
-          {showPharmacy && <PharmacyData />}
-       
+          {/* <div className="flex flex-wrap gap-[10px] w-full items-center justify-center">
+              <Card className="bg-[#ee427b]" style={{ width: 370 }}>
+                <p className="text-white">DAILY VISITS</p>
+                <p className="text-white font-bold">8,652Card content</p>
+                <p className="text-white">2.97% Since last month</p>
+              </Card>
+              <Card className="bg-[#7657c0]" style={{ width: 370 }}>
+                <p className="text-white">REVENUE</p>
+                <p className="text-white font-bold">$9,254.62</p>
+                <p className="text-white">18.25% Since last month</p>
+              </Card>
+              <Card className="bg-sky-500" style={{ width: 370 }}>
+                <p className="text-white">ORDERS</p>
+                <p className="text-white font-bold">753</p>
+                <p className="text-white">-5.75% Since last month</p>
+              </Card>
+              <Card className="bg-[#2cb6b6]" style={{ width: 370 }}>
+                <p className="text-white">USERS</p>
+                <p className="text-white font-bold">63,154</p>
+                <p className="text-white">8.21% Since last month</p>
+              </Card>
+            </div> */}
         </div>
-        <div>{showDoctor && <DoctorData />}</div>
-        <div>
 
-        {allPharmacies && <ShowAllPharmacies />}
+        <div>
+          {showPharmacy && <PharmacyData />}
+          {appointment && <AddAppointment />}
+          {showDoctor && <DoctorData />}
+          {allPharmacies && <ShowAllPharmacies />}
+          {requestDoctor && <RequestDoctor />}
+          {requestPharmacie && <RequestPharmacy />}
+          {activeDoctor && <ActiveDoctors />}
+          {showActivePharmacy && <ActivePharmacy />}
+          {appointments && <Appointments />}
+          {categories && <AddCategories />}
+          {showCategories && <ShowCategories />}
         </div>
       </Layout>
     </Layout>

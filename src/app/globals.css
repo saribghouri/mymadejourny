@@ -3,55 +3,170 @@
 @tailwind utilities;
 
 .inputWithBorder {
-    border-bottom: 3px solid black;
-  }
-  .search-input{
-    border: none !important;
-  }
-  .ant-input-wrapper{
-    border: none !important;
-  }
-  .ant-input{
-    border: none !important;
+  border-bottom: 3px solid black;
+}
+.search-input {
+  border: none !important;
+}
+.ant-input-wrapper {
+  border: none !important;
+}
+.ant-input {
+  border: none !important;
+}
+.border {
+  border: 1px solid rgb(216, 210, 210) !important;
+}
+.ant-btn {
+  border: none !important;
+}
 
-  }
-  .border{
-    border: 1px solid rgb(216, 210, 210) !important;
-  }
-  .ant-btn{
-    border: none !important;
-  }
+.ant-menu-item-selected {
+  padding-left: 48px;
+  background-color: #ffffff !important;
+  color: #2361dd !important;
+  margin-left: 8px !important;
+  border-bottom-left-radius: 20px !important;
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+.ant-menu-item:hover {
+  background-color: #ffffff !important;
+  color: #2361dd !important;
+  margin-left: 8px !important;
 
-  .ant-menu-item:hover {
-    color: rgb(49, 204, 243) !important; 
- 
-  }
- 
+  margin-left: 8px !important;
+  border-bottom-left-radius: 20px !important;
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+.ant-menu-item {
+  margin-left: 8px !important;
+}
+.ant-menu-submenu-title:hover {
+  color: #2361dd !important;
+  background-color: #ffffff !important;
 
-  .ant-menu-item-selected {
-    background-color: transparent !important;
-    color: rgb(49, 204, 243) !important; 
-  }
-  .ant-menu-submenu-title:hover{
-    color: rgb(49, 204, 243) !important; 
-  }
+  margin-left: 8px !important;
+  border-bottom-left-radius: 20px !important;
+  border-top-left-radius: 20px !important;
+  border-top-right-radius: 0px !important;
+  border-bottom-right-radius: 0px !important;
+}
+.ant-menu-submenu-title {
+  margin-left: 8px !important;
+}
 
-  .ant-menu-submenu-title-selected{
-    color: rgb(49, 204, 243) !important;
-  }
-  .ant-upload{
-    width: 100% !important;
-    margin-bottom: 40px !important;
-  }
-  .ant-select-selector{
-    height: 40px !important;
-  }
-  #loginForm_gender_help{
-    margin-top: 8px !important;
-  }
-  .pharmacy-img{
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  
+.ant-menu-submenu-title-selected {
+  color: rgb(247, 244, 244) !important;
+  background-color: #2361dd !important;
+}
+
+.ant-select-selector {
+  height: 40px !important;
+}
+#loginForm_gender_help {
+  margin-top: 8px !important;
+}
+.pharmacy-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.ant-menu-inline {
+  background-color: transparent !important;
+}
+.ant-layout-sider-trigger {
+  display: none !important;
+}
+.anticon-menu-fold {
+  color: white !important;
+}
+.ant-table-thead {
+  background-color: #2361dd !important;
+}
+
+.ant-table-thead th {
+  background-color: #2361dd !important;
+  color: #ffffff !important;
+}
+.ant-table-wrapper {
+  margin-left: 20px !important;
+  margin-right: 20px !important;
+}
+.ant-menu-dark {
+  background-color: #2361dd !important;
+  color: #ffffff !important;
+}
+.anticon-menu-unfold {
+  color: #ffffff !important;
+}
+.ant-menu-inline-collapsed {
+  background-color: #2361dd !important;
+}
+.ant-menu-submenu-placement-rightTop {
+  background-color: #2361dd !important;
+}
+.ant-menu-submenu-popup {
+  background-color: #2361dd !important;
+}
+.ant-menu-dark {
+  background-color: #2361dd !important;
+}
+.ant-menu-dark {
+  background-color: #2361dd !important;
+}
+.ant-menu {
+  background-color: #2361dd !important;
+  color: #ffffff !important;
+  border-radius: none !important;
+}
+.ant-tooltip {
+  background-color: #2361dd !important;
+  color: #ffffff !important;
+}
+.ant-menu-inline-collapsed-tooltip {
+  background-color: #2361dd !important;
+}
+.ant-tooltip-arrow {
+  background-color: #2361dd !important;
+}
+
+.custom-modal .ant-modal-title {
+  color: #2361dd;
+  font-size: 22px;
+  font-family: cursive;
+  background-color: #f2f7ff !important;
+}
+
+.ant-modal-content {
+  background-color: #f2f7ff !important;
+}
+.ant-modal-title {
+  background-color: #f2f7ff !important;
+  font-family: cursive;
+  font-size: 22px !important;
+  color: #2361dd !important;
+}
+.categorie {
+  font-family: cursive;
+}
+
+.ant-upload {
+  width: 100% !important;
+}
+.Appointment,
+.categories,
+.pharmacy-Requests,
+.Active-Pharmacy,
+.Register-Pharmacy,
+.Doctor-Requests,
+.pharmacy-Requests,
+.Doctors {
+  font-family: cursive;
+  color: #000000 !important;
+  font-size: 20px !important;
+}
