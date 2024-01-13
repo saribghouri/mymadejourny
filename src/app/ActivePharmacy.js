@@ -1,5 +1,5 @@
-import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Spin, Table } from "antd";
+import { EyeOutlined, LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import { Button, Form, Input, Modal, Spin, Table } from "antd";
 
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -7,8 +7,10 @@ const ActivePharmacy = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [Pharmacies, setPharmacies] = useState([]);
-
+  const [selectedPharmacies, setSelectedPharmacies] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+ 
 
   const filteredPharmacies = Pharmacies
     ? Pharmacies.filter((pharmacy) =>
@@ -58,7 +60,10 @@ const ActivePharmacy = () => {
       }))
     : [];
   console.log("data", datas);
-
+  const handleView = (doctor) => {
+    setSelectedPharmacies(doctor);
+    setModalVisible(true);
+  };
   const handleActivatePharmacy = async (userId) => {
     try {
       const token = Cookies.get("apiToken");
@@ -120,9 +125,16 @@ const ActivePharmacy = () => {
       console.error("Error deactivating Pharmacies:", error);
     }
   };
-
+  const dataSourceWithSerial = filteredPharmacies.map((pharmacyData, index) => ({
+    ...pharmacyData,
+    key: pharmacyData.id,
+    serialNumber: index + 1,
+  }));
   const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "No", dataIndex: "serialNumber", key: "serialNumber" }, // New column
+
+    { title: "Profile", dataIndex: "profileImage", key: "profileImage", render: (text, record) => <img src={text} style={{ width: 50, height: 50, borderRadius: '50%' }} /> },
+
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
     {
@@ -149,7 +161,31 @@ const ActivePharmacy = () => {
         </>
       ),
     },
-    //
+    {
+      title: "Action",
+      dataIndex: "id",
+      key: "action",
+      render: (id, record) => (
+        <div>
+          {/* <EditOutlined
+            className="text-[#2361dd] "
+            type="link"
+            onClick={() => handleEdit(record)}
+          />
+          <DeleteOutlined
+            className="text-[#990e0e] ml-[10px]"
+            type="link"
+            danger
+            onClick={() => handleDelete(record.id)}
+          /> */}
+          <EyeOutlined
+            className="text-[#1f9c40] ml-[10px]"
+            type="link"
+            onClick={() => handleView(record)}
+          />
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -164,20 +200,72 @@ const ActivePharmacy = () => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      {loading ? (
-        <Spin
-          className="flex justify-center w-[100%] h-[200px] items-center"
-          indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-        />
-      ) : (
+    
         <Table
           columns={columns}
-          dataSource={filteredPharmacies.map((Pharmacies) => ({
+          loading={loading}
+          dataSource={dataSourceWithSerial.map((Pharmacies) => ({
             ...Pharmacies,
             key: Pharmacies.id,
           }))}
         />
-      )}
+    <Modal
+        width={300}
+        open={modalVisible}
+        title="View Doctor"
+        onCancel={() => setModalVisible(false)}
+        footer={null}
+        className="custom-modal"
+      >
+        {selectedPharmacies && (
+          <div className="flex justify-center flex-col w-full">
+            {selectedPharmacies.profileImage && (
+              <img
+                src={selectedPharmacies.profileImage}
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: "50%",
+                  marginBottom: 10,
+                }}
+                alt="Profile"
+              />
+            )}
+            <div className="flex flex-col gap-[20px]">
+              <p>
+                <span className="font-bold mr-[110px]">Name:</span>
+                {selectedPharmacies.userName}
+                <hr></hr>
+              </p>
+
+              <p>
+                <span className="font-bold mr-[50px]">Email:</span>
+                {selectedPharmacies.emailAddress} <hr></hr>
+              </p>
+
+              <p>
+                <span className="font-bold mr-[80px]">Experience:</span>
+                {selectedPharmacies.noOfExperience} <hr></hr>
+              </p>
+
+              <p>
+                <span className="font-bold mr-[60px]">Specialization:</span>
+                {selectedPharmacies.specialization} <hr></hr>
+              </p>
+
+              <p>
+                <span className="font-bold mr-[130px]">Age:</span>
+                {selectedPharmacies.age} <hr></hr>
+              </p>
+
+              <p>
+                <span className="font-bold mr-[70px]">AffiliationNo:</span>
+                {selectedPharmacies.affiliationNo} <hr></hr>
+              </p>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

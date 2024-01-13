@@ -12,6 +12,7 @@ import {
   Form,
   message,
   Upload,
+  Card,
 } from "antd";
 import Link from "antd/es/typography/Link";
 import Image from "next/image";
@@ -61,6 +62,8 @@ const App = () => {
   const [showCategories, setShowCategories] = useState(false);
   const [appointments, setAppointments] = useState(false);
   const [userDetails, setUserDetails] = useState([]);
+  const [loadingUpdateProfile, setLoadingUpdateProfile] = useState(false);
+
   const [showProfileEditModal, setShowProfileEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
@@ -70,16 +73,13 @@ const App = () => {
   const [userProfileImage, setUserProfileImage] = useState(
     userDetails?.profileImage || null
   );
-  console.log("Affiliation No:", userDetails.affiliationNo);
-  console.log("gender:", userDetails.gender);
-  console.log("specialization:", userDetails.specialization);
-  console.log("age:", userDetails.age);
-  console.log("noOfExperience:", userDetails.noOfExperience);
+  console.log(userDetails);
   const handleShowProfileEditModal = () => {
     setShowProfileEditModal(true);
   };
   const handleForgetPassword = async (values) => {
     try {
+      setLoadingUpdateProfile(true);
       const token = Cookies.get("apiToken");
       const response = await fetch(
         "https://mymedjournal.blownclouds.com/api/forget/password",
@@ -165,8 +165,10 @@ const App = () => {
     setShowDoctor(false);
     setShowActivePharmacy(false);
   };
+
   const handleShowPharmacy = () => {
     setShowPharmacy(true);
+    setCategories(false);
     setRequestDoctor(false);
     setShowPharmacies(false);
     setShowCategories(false);
@@ -256,6 +258,7 @@ const App = () => {
   };
   const handleCategories = () => {
     setCategories(true);
+
     setAppointments(false);
     setRequestPharmacy(false);
     setRequestDoctor(false);
@@ -271,6 +274,7 @@ const App = () => {
   const handleShowCategories = () => {
     setShowCategories(true);
     setAppointments(false);
+
     setCategories(false);
     setRequestPharmacy(false);
     setRequestDoctor(false);
@@ -545,8 +549,11 @@ const App = () => {
   );
 
   const handleProfileEdit = async (values) => {
+    
     try {
+      setLoadingUpdateProfile(true);
       const token = Cookies.get("apiToken");
+      const userId = userDetails.id;
       const formData = new FormData();
       formData.append("userName", values.userName);
       formData.append("affiliationNo", values.affiliationNo);
@@ -560,7 +567,7 @@ const App = () => {
       }
 
       const response = await fetch(
-        "https://mymedjournal.blownclouds.com/api/users/edituser",
+        `https://mymedjournal.blownclouds.com/api/users/edituser/${userId}`,
         {
           method: "POST",
           headers: {
@@ -573,6 +580,7 @@ const App = () => {
 
       if (response.ok) {
         const data = await response.json();
+        setLoadingUpdateProfile(false);
 
         const updatedUserDetails = {
           ...userDetails,
@@ -725,6 +733,7 @@ const App = () => {
                     <Button
                       className="bg-[#2361dd] !text-white"
                       htmlType="submit"
+                      loading={loadingUpdateProfile}
                     >
                       Change Password
                     </Button>
@@ -773,7 +782,7 @@ const App = () => {
                   onFinish={handleProfileEdit}
                   onFinishFailed={onFinishFailed}
                 >
-                    <Form.Item
+                  <Form.Item
                     className="h-[50px] mb-[80px] w-[100%]"
                     name="upload"
                     valuePropName="fileList"
@@ -812,7 +821,10 @@ const App = () => {
                       )}
                     </Upload>
                   </Form.Item>
+                  <label className="mb-[10px] ml-[2px]">UserName</label>
+
                   <Form.Item
+                    className="mt-[10px]"
                     name="userName"
                     rules={[
                       {
@@ -823,8 +835,23 @@ const App = () => {
                   >
                     <Input placeholder="User Name" />
                   </Form.Item>
+                  <label className="mb-[10px]  ml-[2px]">Gender</label>
                   <Form.Item
+                    className="mt-[10px]"
                     name="gender"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter gender",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="gender" />
+                  </Form.Item>
+                  <label className="mb-[10px]  ml-[2px]">Age</label>
+                  <Form.Item
+                    className="mt-[10px]"
+                    name="age"
                     rules={[
                       {
                         required: true,
@@ -836,7 +863,11 @@ const App = () => {
                   </Form.Item>
                   {userDetails.userRole === "3" && (
                     <>
+                      <label className="mb-[10px]  ml-[2px]">
+                        Specialization
+                      </label>
                       <Form.Item
+                        className="mt-[10px]"
                         name="specialization"
                         rules={[
                           {
@@ -847,8 +878,10 @@ const App = () => {
                       >
                         <Input placeholder="specialization" />
                       </Form.Item>
-                     
+                      <label className="mb-[10px]  ml-[2px]">Experience</label>
+
                       <Form.Item
+                        className="mt-[10px]"
                         name="noOfExperience"
                         rules={[
                           {
@@ -859,7 +892,11 @@ const App = () => {
                       >
                         <Input placeholder="noOfExperience" />
                       </Form.Item>
+                      <label className="mb-[10px]  ml-[2px]">
+                        affiliationNo
+                      </label>
                       <Form.Item
+                        className="mt-[10px]"
                         name="affiliationNo"
                         rules={[
                           {
@@ -874,7 +911,11 @@ const App = () => {
                   )}
                   {userDetails.userRole === "4" && (
                     <>
+                      <label className="mb-[10px]  ml-[2px]">
+                        affiliationNo
+                      </label>
                       <Form.Item
+                        className="mt-[10px]"
                         name="affiliationNo"
                         rules={[
                           {
@@ -885,7 +926,9 @@ const App = () => {
                       >
                         <Input placeholder="affiliationNo" />
                       </Form.Item>
+                      <label className="mb-[10px]  ml-[2px]">Age</label>
                       <Form.Item
+                        className="mt-[10px]"
                         name="age"
                         rules={[
                           {
@@ -898,11 +941,12 @@ const App = () => {
                       </Form.Item>
                     </>
                   )}
-              
+
                   <Form.Item>
                     <Button
                       className="bg-[#2361dd] !text-white"
                       htmlType="submit"
+                      loading={loadingUpdateProfile} // Add loading prop here
                     >
                       Update Profile
                     </Button>
@@ -915,32 +959,6 @@ const App = () => {
 
         <div>
           {ShowPharmacie && <ShowPharmacies />}
-
-          {/* <div className="flex flex-wrap gap-[10px] w-full items-center justify-center">
-              <Card className="bg-[#ee427b]" style={{ width: 370 }}>
-                <p className="text-white">DAILY VISITS</p>
-                <p className="text-white font-bold">8,652Card content</p>
-                <p className="text-white">2.97% Since last month</p>
-              </Card>
-              <Card className="bg-[#7657c0]" style={{ width: 370 }}>
-                <p className="text-white">REVENUE</p>
-                <p className="text-white font-bold">$9,254.62</p>
-                <p className="text-white">18.25% Since last month</p>
-              </Card>
-              <Card className="bg-sky-500" style={{ width: 370 }}>
-                <p className="text-white">ORDERS</p>
-                <p className="text-white font-bold">753</p>
-                <p className="text-white">-5.75% Since last month</p>
-              </Card>
-              <Card className="bg-[#2cb6b6]" style={{ width: 370 }}>
-                <p className="text-white">USERS</p>
-                <p className="text-white font-bold">63,154</p>
-                <p className="text-white">8.21% Since last month</p>
-              </Card>
-            </div> */}
-        </div>
-
-        <div>
           {showPharmacy && <PharmacyData />}
           {appointment && <AddAppointment />}
           {showDoctor && <DoctorData />}
@@ -952,6 +970,41 @@ const App = () => {
           {appointments && <Appointments />}
           {categories && <AddCategories />}
           {showCategories && <ShowCategories />}
+          {!ShowPharmacie &&
+            !showPharmacy &&
+            !appointment &&
+            !showDoctor &&
+            !allPharmacies &&
+            !requestDoctor &&
+            !requestPharmacie &&
+            !activeDoctor &&
+            !showActivePharmacy &&
+            !appointments &&
+            !categories &&
+            !showCategories && (
+              <div className="flex flex-wrap gap-[10px] w-full items-center justify-center">
+                <Card className="bg-[#ee427b]" style={{ width: 370 }}>
+                  <p className="text-white">DAILY VISITS</p>
+                  <p className="text-white font-bold">8,652Card content</p>
+                  <p className="text-white">2.97% Since last month</p>
+                </Card>
+                <Card className="bg-[#7657c0]" style={{ width: 370 }}>
+                  <p className="text-white">REVENUE</p>
+                  <p className="text-white font-bold">$9,254.62</p>
+                  <p className="text-white">18.25% Since last month</p>
+                </Card>
+                <Card className="bg-sky-500" style={{ width: 370 }}>
+                  <p className="text-white">ORDERS</p>
+                  <p className="text-white font-bold">753</p>
+                  <p className="text-white">-5.75% Since last month</p>
+                </Card>
+                <Card className="bg-[#2cb6b6]" style={{ width: 370 }}>
+                  <p className="text-white">USERS</p>
+                  <p className="text-white font-bold">63,154</p>
+                  <p className="text-white">8.21% Since last month</p>
+                </Card>
+              </div>
+            )}
         </div>
       </Layout>
     </Layout>

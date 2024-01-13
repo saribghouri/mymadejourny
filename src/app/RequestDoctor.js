@@ -153,9 +153,16 @@ const RequestDoctor = () => {
       console.error("Error rejecting Doctor:", error);
     }
   };
-
+  const dataSourceWithSerial = filteredDoctor.map((doctorData, index) => ({
+    ...doctorData,
+    key: doctorData.id,
+    serialNumber: index + 1,
+  }));
   const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "No", dataIndex: "serialNumber", key: "serialNumber" }, 
+
+    { title: "Profile", dataIndex: "profileImage", key: "profileImage", render: (text, record) => <img src={text} style={{ width: 50, height: 50, borderRadius: '50%' }} /> },
+
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
     {
@@ -230,7 +237,8 @@ const RequestDoctor = () => {
       </div>
       <Table
         columns={columns}
-        dataSource={filteredDoctor.map((doctorData) => ({
+        loading={loading}
+        dataSource={dataSourceWithSerial.map((doctorData) => ({
           ...doctorData,
           key: doctorData.id,
           rejecteReason: doctorData.rejecteReason,

@@ -76,9 +76,9 @@ const DoctorData = () => {
     try {
       const token = Cookies.get("apiToken");
       const response = await fetch(
-        `https://mymedjournal.blownclouds.com/api/doctor/categories/${categoryId}`,
+        `https://mymedjournal.blownclouds.com/api/categories/update/${categoryId}`,
         {
-          method: "PUT",
+          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
@@ -104,7 +104,7 @@ const DoctorData = () => {
         );
         setEditingCategoryId(null);
         setIsModalVisible(false);
-        // Clear imageUrl after saving
+     
         setImageUrl("");
       } else {
         console.error("Failed to save category changes");
@@ -147,9 +147,9 @@ const DoctorData = () => {
     }
   };
 
-  const editIcon = <EditOutlined style={{ color: "blue" }} />;
-  const saveIcon = <EditOutlined style={{ color: "green" }} />;
-  const cancelIcon = <EditOutlined style={{ color: "red" }} />;
+  const editIcon = <EditOutlined style={{ color: "#2361dd" }} />;
+  const saveIcon = <EditOutlined style={{ color: "#2361dd" }} />;
+  const cancelIcon = <EditOutlined style={{ color: "#2361dd" }} />;
   const getBase64 = (img, callback) => {
     const reader = new FileReader();
     reader.addEventListener("load", () => callback(reader.result));
@@ -172,13 +172,15 @@ const DoctorData = () => {
       getBase64(info.file.originFileObj || info.file, (url) => {
         setLoading(false);
         setImageUrl(url);
+        setEditCategoryImage(url)
         setForceRerender((prev) => !prev);
         console.log("Image URL:", url);
       });
     }
   };
   const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Serial No", dataIndex: "serialNo", key: "serialNo" }, 
+
     {
       title: "categorieImage",
       dataIndex: "categorieImage",
@@ -205,7 +207,7 @@ const DoctorData = () => {
         const editMode = editingCategoryId === record.id;
         return (
           <>
-            <DeleteOutlined onClick={() => handleDelete(record.id)} />
+            <DeleteOutlined className="text-[#a82e2e]" onClick={() => handleDelete(record.id)} />
             {editMode ? (
               <>
                 <span
@@ -245,8 +247,9 @@ const DoctorData = () => {
       <Table
         columns={columns}
         loading={loading}
-        dataSource={filteredcategories.map((category) => ({
+        dataSource={filteredcategories.map((category, index) => ({
           ...category,
+          serialNo: index + 1, 
           key: category.id,
         }))}
       />

@@ -77,7 +77,7 @@ const AddAppointment = () => {
             className="w-[350px]"
             format="HH:mm"
             minuteStep={15}
-            renderExtraFooter={() => " to "}
+            // renderExtraFooter={() => " to "}
           />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 18, span: 18 }}>

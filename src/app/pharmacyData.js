@@ -1,6 +1,7 @@
 import {
   DeleteOutlined,
   EditOutlined,
+  EyeOutlined,
   LoadingOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
@@ -16,6 +17,7 @@ const PharmacyData = () => {
   const [selectedPharmacy, setSelectedPharmacy] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [isViewModalVisible, setIsViewModalVisible] = useState(false);
 
   const filteredPharmacies = Pharmacies
     ? Pharmacies.filter((pharmacy) =>
@@ -69,7 +71,6 @@ const PharmacyData = () => {
       );
 
       if (response.ok) {
-        
         message.success("pharmacy delete successfully");
 
         setPharmacies((prevPharmacies) =>
@@ -82,9 +83,12 @@ const PharmacyData = () => {
       console.error("Error deleting user:", error);
     }
   };
-
+  const handleView = (pharmacy) => {
+    setSelectedPharmacy(pharmacy);
+    setIsViewModalVisible(true);
+  };
   const columns = [
-    { title: "ID", dataIndex: "id", key: "id" },
+    { title: "Serial No", dataIndex: "serialNo", key: "serialNo" }, 
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
     {
@@ -108,21 +112,24 @@ const PharmacyData = () => {
       ),
     },
     {
-      title: "Delete",
+      title: "Action",
       dataIndex: "id",
       key: "delete",
-      render: (id) => (
-        <DeleteOutlined className="text-[#990e0e] ml-[10px]" type="link" danger onClick={() => handleDelete(record.id)}/>
-
-      ),
-    },
-
-    {
-      title: "Edit",
-      dataIndex: "id",
-      key: "edit",
       render: (id, record) => (
-        <EditOutlined type="link" onClick={() => handleEdit(record)} />
+        <>
+          <EditOutlined type="link" onClick={() => handleEdit(record)} />
+          <DeleteOutlined
+            className="text-[#990e0e] ml-[10px]"
+            type="link"
+            danger
+            onClick={() => handleDelete(record.id)}
+          />
+          <EyeOutlined
+            className="text-[#1f9c40] ml-[10px]"
+            type="link"
+            onClick={() => handleView(record)}
+          />
+        </>
       ),
     },
   ];
@@ -177,37 +184,71 @@ const PharmacyData = () => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      {/* {loading ? (
-        <Spin
-          className="flex justify-center w-[100%] h-[200px] items-center"
-          indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-        />
-      ) : (
-        <Table
-          columns={columns}
-          dataSource={filteredPharmacies.map((Pharmacies) => ({
-            ...Pharmacies,
-            key: Pharmacies.id,
-          }))}
-        />
-      )} */}
+      <Modal
+        width={300}
+        open={isViewModalVisible}
+        title="View Doctor"
+        onCancel={() => setIsViewModalVisible(false)}
+        footer={null}
+        className="custom-modal"
+      >
+        {selectedPharmacy && (
+          <div className="flex justify-center flex-col w-full">
+            {selectedPharmacy.profileImage && (
+              <img
+                src={selectedPharmacy.profileImage}
+                style={{
+                  width: 100,
+                  height: 100,
+                  borderRadius: "50%",
+                  marginBottom: 10,
+                }}
+                alt="Profile"
+              />
+            )}
+            <div className="flex flex-col gap-[20px]">
+              <p>
+                <span className="font-bold mr-[110px]">Name:</span>
+                {selectedPharmacy.userName}
+                <hr></hr>
+              </p>
 
+              <p>
+                <span className="font-bold mr-[50px]">Email:</span>
+                {selectedPharmacy.emailAddress} <hr></hr>
+              </p>
+
+              <p>
+                <span className="font-bold mr-[130px]">Age:</span>
+                {selectedPharmacy.age} <hr></hr>
+              </p>
+
+              <p>
+                <span className="font-bold mr-[70px]">AffiliationNo:</span>
+                {selectedPharmacy.affiliationNo} <hr></hr>
+              </p>
+            </div>
+          </div>
+        )}
+      </Modal>
       {Pharmacies && Pharmacies.length > 0 ? (
         <Table
-          columns={columns}
-          dataSource={filteredPharmacies.map((Pharmacies) => ({
-            ...Pharmacies,
-            key: Pharmacies.id,
-          }))}
-        />
+        columns={columns}
+        dataSource={filteredPharmacies.map((pharmacy, index) => ({
+          ...pharmacy,
+          serialNo: index + 1, 
+          key: pharmacy.id,
+        }))}
+      />
       ) : (
         <Table
-          columns={columns}
-          dataSource={filteredPharmacies.map((Pharmacies) => ({
-            ...Pharmacies,
-            key: Pharmacies.id,
-          }))}
-        />
+        columns={columns}
+        dataSource={filteredPharmacies.map((pharmacy, index) => ({
+          ...pharmacy,
+          serialNo: index + 1, 
+          key: pharmacy.id,
+        }))}
+      />
       )}
 
       <Modal

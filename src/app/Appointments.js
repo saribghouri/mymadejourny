@@ -3,72 +3,27 @@ import {
   EditOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Popconfirm, Table, message } from "antd";
+import {  DatePicker, Form, Input,  Modal,  Table, TimePicker, message } from "antd";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
 const Appointments = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [userId, setUserId] = useState(null);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editAppointmentId, setEditAppointmentId] = useState(null);
+  const [editAppointmentData, setEditAppointmentData] = useState({});
+  const [form] = Form.useForm();
+
   const filteredDoctor = doctors
     ? doctors.filter((doctor) =>
         doctor.appointmentday.toLowerCase().includes(searchText.toLowerCase())
       )
     : [];
-  console.log("userId", userId);
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [editingAppointment, setEditingAppointment] = useState(null);
 
-  const handleEdit = (appointment) => {
-    setEditingAppointment(appointment);
-    setEditModalVisible(true);
-  };
-
-  const handleEditCancel = () => {
-    setEditingAppointment(null);
-    setEditModalVisible(false);
-  };
-
-  const handleEditSubmit = async (values) => {
-    try {
-      const clonedValues = JSON.parse(JSON.stringify(values));
   
-      const token = Cookies.get("apiToken");
-      const response = await fetch(
-        `https://mymedjournal.blownclouds.com/api/appointment/${editingAppointment.id}`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(clonedValues),
-        }
-      );
-  
-      if (response.ok) {
-        message.success("Appointment edited successfully");
-        setDoctors((prevAppointments) =>
-          prevAppointments.map((appointment) =>
-            appointment.id === editingAppointment.id
-              ? { ...appointment, ...clonedValues }
-              : appointment
-          )
-        );
-        setEditModalVisible(false);
-      } else {
-        console.error(
-          "Failed to edit appointment:",
-          response.status,
-          response.statusText
-        );
-      }
-    } catch (error) {
-      console.error("Error editing appointment:", error);
-    }
-  };
   
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -209,7 +164,48 @@ const Appointments = () => {
       ),
     },
   ];
-
+  
+  const handleEdit = (record) => {
+    setEditModalVisible(true);
+    setEditAppointmentId(record.id);
+    setEditAppointmentData(record);
+  };
+  const handleEditSubmit = async () => {
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        `https://mymedjournal.blownclouds.com/api/appointment/${editAppointmentId}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form.getFieldsValue()),
+        }
+      );
+  
+      if (response.ok) {
+        message.success("Appointment updated successfully");
+  
+        setDoctors((prevAppointments) =>
+          prevAppointments.map((appointment) =>
+            appointment.id === editAppointmentId
+              ? { ...appointment, ...form.getFieldsValue() }
+              : appointment
+          )
+        );
+  
+        setEditModalVisible(false);
+        form.resetFields();
+      } else {
+        console.error("Failed to update appointment:", response.status);
+      }
+    } catch (error) {
+      console.error("Error updating appointment:", error);
+    }
+  };
+  
   return (
     <div>
       <div className="flex justify-between pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[10px] mb-[20px]">
@@ -231,29 +227,21 @@ const Appointments = () => {
           key: doctor.id,
         }))}
       />
-      <Modal
+       <Modal
         title="Edit Appointment"
-        visible={editModalVisible}
-        onCancel={handleEditCancel}
-        footer={[
-          <Button key="back" onClick={handleEditCancel}>
-            Cancel
-          </Button>,
-          <Button key="submit" type="primary" onClick={handleEditSubmit}>
-            Save Changes
-          </Button>,
-        ]}
+        open={editModalVisible}
+        onOk={handleEditSubmit}
+        onCancel={() => {
+          setEditModalVisible(false);
+          form.resetFields();
+        }}
       >
-        <Form
-          name="editAppointmentForm"
-          initialValues={{ ...editingAppointment }}
-          onFinish={handleEditSubmit}
-        >
-          <Form.Item name="appointmentday" label="Appointment Day">
-            <Input />
+        <Form form={form} initialValues={editAppointmentData}>
+          <Form.Item label="Appointment Day" name="appointmentday">
+       <Input/>
           </Form.Item>
-          <Form.Item name="appointmenttime" label="Appointment Time">
-            <Input />
+          <Form.Item label="Appointment Time" name="appointmenttime">
+          <Input/>
           </Form.Item>
         </Form>
       </Modal>
