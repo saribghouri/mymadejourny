@@ -1,4 +1,5 @@
 
+"use client"
 import {
   DeleteOutlined,
   EditOutlined,
@@ -164,6 +165,8 @@ const DoctorData = () => {
   const handleDelete = async (userId) => {
     try {
       const token = Cookies.get("apiToken");
+      console.log("Deleting user with ID:", userId);
+  
       const response = await fetch(
         `https://mymedjournal.blownclouds.com/api/delete-user/${userId}`,
         {
@@ -174,20 +177,23 @@ const DoctorData = () => {
           },
         }
       );
-
+  
+      console.log("Response from delete API:", response);
+  
       if (response.ok) {
-        message.success("doctor delete successfully");
-
+        message.success("Doctor deleted successfully");
         setDoctors((prevDoctors) =>
           prevDoctors.filter((doctor) => doctor.id !== userId)
         );
       } else {
         console.error("Failed to delete user");
+        message.error("Failed to delete user");
       }
     } catch (error) {
       console.error("Error deleting user:", error);
     }
   };
+  
   const handleView = (doctor) => {
     setSelectedDoctor(doctor);
     setIsViewModalVisible(true);
