@@ -340,7 +340,7 @@ const EditUserForm = ({ doctor, onSave }) => {
         <Button
           className="bg-[#2361dd] text-white"
           htmlType="submit"
-          loading={loadingUpdateProfile}
+          // loading={loadingUpdateProfile}
         >
           Save
         </Button>
