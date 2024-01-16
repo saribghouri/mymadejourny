@@ -1,4 +1,8 @@
-import { EyeOutlined, LoadingOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  EyeOutlined,
+  LoadingOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { Button, Form, Input, Modal, Spin, Table } from "antd";
 
 import React, { useEffect, useState } from "react";
@@ -10,7 +14,6 @@ const ActivePharmacy = () => {
   const [selectedPharmacies, setSelectedPharmacies] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
- 
 
   const filteredPharmacies = Pharmacies
     ? Pharmacies.filter((pharmacy) =>
@@ -125,15 +128,27 @@ const ActivePharmacy = () => {
       console.error("Error deactivating Pharmacies:", error);
     }
   };
-  const dataSourceWithSerial = filteredPharmacies.map((pharmacyData, index) => ({
-    ...pharmacyData,
-    key: pharmacyData.id,
-    serialNumber: index + 1,
-  }));
+  const dataSourceWithSerial = filteredPharmacies.map(
+    (pharmacyData, index) => ({
+      ...pharmacyData,
+      key: pharmacyData.id,
+      serialNumber: index + 1,
+    })
+  );
   const columns = [
     { title: "No", dataIndex: "serialNumber", key: "serialNumber" }, // New column
 
-    { title: "Profile", dataIndex: "profileImage", key: "profileImage", render: (text, record) => <img src={text} style={{ width: 50, height: 50, borderRadius: '50%' }} /> },
+    {
+      title: "Profile",
+      dataIndex: "profileImage",
+      key: "profileImage",
+      render: (text, record) => (
+        <img
+          src={text}
+          style={{ width: 50, height: 50, borderRadius: "50%" }}
+        />
+      ),
+    },
 
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
@@ -200,16 +215,16 @@ const ActivePharmacy = () => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-    
-        <Table
-          columns={columns}
-          loading={loading}
-          dataSource={dataSourceWithSerial.map((Pharmacies) => ({
-            ...Pharmacies,
-            key: Pharmacies.id,
-          }))}
-        />
-    <Modal
+
+      <Table
+        columns={columns}
+        loading={loading}
+        dataSource={dataSourceWithSerial.map((Pharmacies) => ({
+          ...Pharmacies,
+          key: Pharmacies.id,
+        }))}
+      />
+      <Modal
         width={300}
         open={modalVisible}
         title="View Doctor"
@@ -218,9 +233,10 @@ const ActivePharmacy = () => {
         className="custom-modal"
       >
         {selectedPharmacies && (
-          <div className="flex justify-center flex-col w-full">
+          <div className="w-full justify-center flex flex-col items-center">
             {selectedPharmacies.profileImage && (
               <img
+                className="flex justify-center  w-[100px] h-[100px] object-cover items-center rounded-[50%]"
                 src={selectedPharmacies.profileImage}
                 style={{
                   width: 100,
@@ -231,36 +247,24 @@ const ActivePharmacy = () => {
                 alt="Profile"
               />
             )}
-            <div className="flex flex-col gap-[20px]">
-              <p>
+            <div className="flex flex-col gap-[20px] mt-[20px]">
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[110px]">Name:</span>
-                {selectedPharmacies.userName}
-                <hr></hr>
+                <p> {selectedPharmacies.userName}</p>
               </p>
 
-              <p>
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[50px]">Email:</span>
-                {selectedPharmacies.emailAddress} <hr></hr>
+                <p> {selectedPharmacies.emailAddress}</p>
               </p>
 
-              <p>
-                <span className="font-bold mr-[80px]">Experience:</span>
-                {selectedPharmacies.noOfExperience} <hr></hr>
-              </p>
-
-              <p>
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[60px]">Specialization:</span>
-                {selectedPharmacies.specialization} <hr></hr>
+                <p>{selectedPharmacies.age}</p>
               </p>
-
-              <p>
-                <span className="font-bold mr-[130px]">Age:</span>
-                {selectedPharmacies.age} <hr></hr>
-              </p>
-
-              <p>
-                <span className="font-bold mr-[70px]">AffiliationNo:</span>
-                {selectedPharmacies.affiliationNo} <hr></hr>
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[60px]">Specialization:</span>
+                <p>{selectedPharmacies.affiliationNo} </p>
               </p>
             </div>
           </div>

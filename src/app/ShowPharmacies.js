@@ -116,7 +116,7 @@ const ShowPharmacies = () => {
   return (
     <div>
       <div className="flex justify-between pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[10px] mb-[20px]">
-        <h1 className="Doctors">Doctors</h1>
+        <h1 className="Doctors">Users Requests</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Input search text"

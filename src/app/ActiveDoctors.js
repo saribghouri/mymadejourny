@@ -9,8 +9,6 @@ const ActiveDoctors = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
-  ;
-
   const filteredDoctor =
     doctors && doctors.length > 0
       ? doctors.filter((doctor) =>
@@ -186,7 +184,7 @@ const ActiveDoctors = () => {
   return (
     <div>
       <div className="flex justify-between pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
-        <h1 className="Doctors">Doctors</h1>
+        <h1 className="Doctors"> Active Doctors</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Input search text"
@@ -210,12 +208,13 @@ const ActiveDoctors = () => {
         title="View Doctor"
         onCancel={() => setModalVisible(false)}
         footer={null}
-        className="custom-modal"
+        className="custom-modal text-center mb-[20px]"
       >
         {selectedDoctor && (
-          <div className="flex justify-center flex-col w-full">
+          <div className="w-full justify-center flex flex-col items-center">
             {selectedDoctor.profileImage && (
               <img
+                className="flex justify-center  w-[100px] h-[100px] object-cover items-center rounded-[50%]"
                 src={selectedDoctor.profileImage}
                 style={{
                   width: 100,
@@ -226,36 +225,34 @@ const ActiveDoctors = () => {
                 alt="Profile"
               />
             )}
-            <div className="flex flex-col gap-[20px]">
-              <p>
+           <div className="flex flex-col gap-[20px] mt-[20px]">
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[110px]">Name:</span>
-                {selectedDoctor.userName}
-                <hr></hr>
+                <p> {selectedDoctor.userName}</p>
               </p>
 
-              <p>
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[50px]">Email:</span>
-                {selectedDoctor.emailAddress} <hr></hr>
+                <p> {selectedDoctor.emailAddress}</p>
               </p>
 
-              <p>
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[80px]">Experience:</span>
-                {selectedDoctor.noOfExperience} <hr></hr>
+                <p>{selectedDoctor.noOfExperience}</p>
               </p>
 
-              <p>
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[60px]">Specialization:</span>
-                {selectedDoctor.specialization} <hr></hr>
+                <p>{selectedDoctor.specialization}</p>
               </p>
 
-              <p>
-                <span className="font-bold mr-[130px]">Age:</span>
-                {selectedDoctor.age} <hr></hr>
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[60px]">Specialization:</span>
+                <p>{selectedDoctor.age}</p>
               </p>
-
-              <p>
-                <span className="font-bold mr-[70px]">AffiliationNo:</span>
-                {selectedDoctor.affiliationNo} <hr></hr>
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[60px]">Specialization:</span>
+                <p>{selectedDoctor.affiliationNo} </p>
               </p>
             </div>
           </div>

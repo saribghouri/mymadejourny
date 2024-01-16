@@ -88,8 +88,7 @@ const PharmacyData = () => {
     setIsViewModalVisible(true);
   };
   const columns = [
-    
-    { title: "Serial No", dataIndex: "serialNo", key: "serialNo" }, 
+    { title: "Serial No", dataIndex: "serialNo", key: "serialNo" },
     {
       title: "Profile",
       dataIndex: "profileImage",
@@ -129,7 +128,11 @@ const PharmacyData = () => {
       key: "delete",
       render: (id, record) => (
         <>
-          <EditOutlined className="text-[18px] text-[#2361dd]" type="link" onClick={() => handleEdit(record)} />
+          <EditOutlined
+            className="text-[18px] text-[#2361dd]"
+            type="link"
+            onClick={() => handleEdit(record)}
+          />
           <DeleteOutlined
             className="text-[#990e0e] ml-[10px] text-[18px]"
             type="link"
@@ -187,7 +190,7 @@ const PharmacyData = () => {
   return (
     <div>
       <div className="flex justify-between pl-[20px] pr-[20px] items-center mt-[20px] mb-[20px]">
-        <h1 className="Register-Pharmacy">Register Pharmacy</h1>
+        <h1 className="Register-Pharmacy">Pharmacies</h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Input search text"
@@ -202,12 +205,13 @@ const PharmacyData = () => {
         title="View Doctor"
         onCancel={() => setIsViewModalVisible(false)}
         footer={null}
-        className="custom-modal"
+        className="custom-modal text-center mb-[20px]"
       >
         {selectedPharmacy && (
-          <div className="flex justify-center flex-col w-full">
+          <div className="w-full justify-center flex flex-col items-center">
             {selectedPharmacy.profileImage && (
               <img
+                className="flex justify-center  w-[100px] h-[100px] object-cover items-center rounded-[50%]"
                 src={selectedPharmacy.profileImage}
                 style={{
                   width: 100,
@@ -218,7 +222,29 @@ const PharmacyData = () => {
                 alt="Profile"
               />
             )}
-            <div className="flex flex-col gap-[20px]">
+
+            <div className="flex flex-col gap-[20px] mt-[20px]">
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[110px]">Name:</span>
+                <p> {selectedPharmacy.userName}</p>
+              </p>
+
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[50px]">Email:</span>
+                <p> {selectedPharmacy.emailAddress}</p>
+              </p>
+
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[60px]">Specialization:</span>
+                <p>{selectedPharmacy.age}</p>
+              </p>
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[60px]">Specialization:</span>
+                <p>{selectedPharmacy.affiliationNo} </p>
+              </p>
+            </div>
+
+            {/* <div className="flex flex-col gap-[20px]">
               <p>
                 <span className="font-bold mr-[110px]">Name:</span>
                 {selectedPharmacy.userName}
@@ -239,28 +265,28 @@ const PharmacyData = () => {
                 <span className="font-bold mr-[70px]">AffiliationNo:</span>
                 {selectedPharmacy.affiliationNo} <hr></hr>
               </p>
-            </div>
+            </div> */}
           </div>
         )}
       </Modal>
       {Pharmacies && Pharmacies.length > 0 ? (
         <Table
-        columns={columns}
-        dataSource={filteredPharmacies.map((pharmacy, index) => ({
-          ...pharmacy,
-          serialNo: index + 1, 
-          key: pharmacy.id,
-        }))}
-      />
+          columns={columns}
+          dataSource={filteredPharmacies.map((pharmacy, index) => ({
+            ...pharmacy,
+            serialNo: index + 1,
+            key: pharmacy.id,
+          }))}
+        />
       ) : (
         <Table
-        columns={columns}
-        dataSource={filteredPharmacies.map((pharmacy, index) => ({
-          ...pharmacy,
-          serialNo: index + 1, 
-          key: pharmacy.id,
-        }))}
-      />
+          columns={columns}
+          dataSource={filteredPharmacies.map((pharmacy, index) => ({
+            ...pharmacy,
+            serialNo: index + 1,
+            key: pharmacy.id,
+          }))}
+        />
       )}
 
       <Modal

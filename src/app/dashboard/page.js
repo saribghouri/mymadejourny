@@ -43,6 +43,7 @@ import ActivePharmacy from "../ActivePharmacy";
 import Appointments from "../Appointments";
 import AddCategories from "../AddCategories";
 import ShowCategories from "../ShowCategories";
+import Cards from "../cards";
 
 const { Header, Sider } = Layout;
 
@@ -65,10 +66,10 @@ const App = () => {
   const [loadingUpdateProfile, setLoadingUpdateProfile] = useState(false);
   const [activeDoctors, setActiveDoctors] = useState(false);
   const [activePharmacy, setActivePharmacy] = useState(false);
+  const [cards, setCards] = useState(false);
   const [pharmacyCount, setPharmacyCount] = useState(false);
   const [inActiveDoctors, setInActiveDoctors] = useState(false);
   const [inActivePharmacy, setInActivePharmacy] = useState(false);
-
   const [showProfileEditModal, setShowProfileEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
@@ -162,6 +163,7 @@ const App = () => {
     setAllPharmacies(false);
     setShowCategories(false);
     setShowPharmacy(false);
+    setCards(false);
     setActiveDoctor(false);
     setShowDoctor(false);
     setAppointments(false);
@@ -175,6 +177,7 @@ const App = () => {
   const handleShowPharmacy = () => {
     setShowPharmacy(true);
     setCategories(false);
+    setCards(false);
     setRequestDoctor(false);
     setShowPharmacies(false);
     setShowCategories(false);
@@ -189,6 +192,7 @@ const App = () => {
     setShowDoctor(true);
     setAllPharmacies(false);
     setShowCategories(false);
+    setCards(false);
     setShowPharmacy(false);
     setShowPharmacies(false);
     setRequestDoctor(false);
@@ -202,6 +206,7 @@ const App = () => {
     setActiveDoctor(true);
     setShowCategories(false);
     setShowDoctor(false);
+    setCards(false);
     setCategories(false);
     setAllPharmacies(false);
     setShowPharmacy(false);
@@ -213,6 +218,7 @@ const App = () => {
   const handleShowActivePharmacy = () => {
     setShowActivePharmacy(true);
     setActiveDoctor(false);
+    setCards(false);
     setShowDoctor(false);
     setShowCategories(false);
     setAllPharmacies(false);
@@ -226,6 +232,7 @@ const App = () => {
   const handleAppointment = () => {
     setAppointment(true);
     setShowDoctor(false);
+    setCards(false);
     setShowCategories(false);
     setAllPharmacies(false);
     setShowPharmacy(false);
@@ -240,6 +247,7 @@ const App = () => {
     setRequestDoctor(true);
     setShowCategories(false);
     setAppointment(false);
+    setCards(false);
     setShowDoctor(false);
     setAllPharmacies(false);
     setShowPharmacy(false);
@@ -251,6 +259,7 @@ const App = () => {
   };
   const handlePharmRequest = () => {
     setRequestPharmacy(true);
+    setCards(false);
     setRequestDoctor(false);
     setShowCategories(false);
     setAppointment(false);
@@ -264,7 +273,7 @@ const App = () => {
   };
   const handleCategories = () => {
     setCategories(true);
-
+    setCards(false);
     setAppointments(false);
     setRequestPharmacy(false);
     setRequestDoctor(false);
@@ -280,7 +289,7 @@ const App = () => {
   const handleShowCategories = () => {
     setShowCategories(true);
     setAppointments(false);
-
+    setCards(false);
     setCategories(false);
     setRequestPharmacy(false);
     setRequestDoctor(false);
@@ -294,6 +303,21 @@ const App = () => {
   };
   const handleAppointments = () => {
     setAppointments(true);
+    setCards(false);
+    setCategories(false);
+    setRequestPharmacy(false);
+    setRequestDoctor(false);
+    setAppointment(false);
+    setShowDoctor(false);
+    setAllPharmacies(false);
+    setShowPharmacy(false);
+    setShowPharmacies(false);
+    setActiveDoctor(false);
+    setShowActivePharmacy(false);
+  };
+  const handleCards = () => {
+    setCards(true);
+    setAppointments(false);
     setCategories(false);
     setRequestPharmacy(false);
     setRequestDoctor(false);
@@ -331,7 +355,14 @@ const App = () => {
     if (userDetails.userRole === "1") {
       console.log("sabgqebew");
       return [
-        getItem("Dashboard ", <DashboardOutlined />),
+        getItem(
+          "Dashboard ",
+          <DashboardOutlined />,
+
+          <>
+            <a onClick={handleCards}></a>
+          </>
+        ),
         getItem("Request's", "sub1", <BookOutlined />, [
           getItem(
             "",
@@ -613,6 +644,7 @@ const App = () => {
       console.error("Error during profile edit:", error);
     }
   };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -640,7 +672,7 @@ const App = () => {
           console.log("Active doctors:", activeDoctors);
           setDoctorsCount(data.doctor.length);
           setActiveDoctors(activeDoctors.length);
-          setInActiveDoctors(activeDoctors.length);
+          setInActiveDoctors(inActiveDoctors.length);
         } else {
           console.error("Failed to fetch doctors");
         }
@@ -681,7 +713,6 @@ const App = () => {
           setPharmacyCount(data.all_pharmacies.length);
           setActivePharmacy(activePharmacy.length);
           setInActivePharmacy(inActivePharmacy.length);
-         
         } else {
           console.error("Failed to fetch doctors");
         }
@@ -694,7 +725,10 @@ const App = () => {
 
     fetchData();
   }, []);
-
+  const handleLogoClick = () => {
+    // Toggle the state to show/hide cards
+    setShowCards(!showCards);
+  };
   return (
     <Layout
       className="rounded-[20px]"
@@ -709,7 +743,7 @@ const App = () => {
         onCollapse={handleCollapse}
         trigger
       >
-        <div className="p-[30px] text-[22px] ">
+        <div className="p-[30px] text-[22px]" onClick={handleLogoClick}>
           <h1 className="text-white text-center">
             <Image
               width={1000}
@@ -720,6 +754,7 @@ const App = () => {
             />
           </h1>
         </div>
+
         <div className="demo-logo-vertical bg-[#fff]" />
         <Menu
           className=""
@@ -1054,6 +1089,7 @@ const App = () => {
           {activeDoctor && <ActiveDoctors />}
           {showActivePharmacy && <ActivePharmacy />}
           {appointments && <Appointments />}
+          {cards && <Cards />}
           {categories && <AddCategories />}
           {showCategories && <ShowCategories />}
           {!ShowPharmacie &&
@@ -1068,51 +1104,8 @@ const App = () => {
             !appointments &&
             !categories &&
             !showCategories &&
-            userDetails.userRole == 1 && (
-              <div className="flex flex-wrap gap-4 w-[98%] ml-[10px] mt-10">
-              <Card className="bg-[#e1edff] card" style={{ width: 'calc(32.2% - 10px)' }}>
-                <p className="text-[#2361dd] pgh font-bold text-22">Total Doctors</p>
-                <p className="text-[#2361dd] pgh flex justify-end mr-10 font-bold text-30">
-                  {doctorsCount}
-                </p>
-              </Card>
-            
-              <Card className="bg-[#e1edff] card" style={{ width: 'calc(32.33% - 10px)' }}>
-                <p className="text-[#24ac18] pgh font-bold text-22">Active Doctors</p>
-                <p className="text-[#24ac18] pgh flex justify-end mr-10 font-bold text-30">
-                  {activeDoctors}
-                </p>
-              </Card>
-            
-              <Card className="bg-[#e1edff] card" style={{ width: 'calc(32.33% - 10px)' }}>
-                <p className="text-[#c01c1c] pgh font-bold text-22">InActive Doctors</p>
-                <p className="text-[#c01c1c] pgh flex justify-end mr-10 font-bold text-30">
-                  {inActiveDoctors}
-                </p>
-              </Card>
-            
-              <Card className="bg-[#e1edff] card" style={{ width: 'calc(32.33% - 10px)' }}>
-                <p className="text-[#2361dd] pgh font-bold text-22">Total Pharmacies</p>
-                <p className="text-[#2361dd] pgh flex justify-end mr-10 font-bold text-30">
-                  {pharmacyCount}
-                </p>
-              </Card>
-            
-              <Card className="bg-[#e1edff] card" style={{ width: 'calc(32.33% - 10px)' }}>
-                <p className="text-[#24ac18] pgh font-bold text-22">Active Pharmacies</p>
-                <p className="text-[#24ac18] pgh flex justify-end mr-10 font-bold text-30">
-                  {activePharmacy}
-                </p>
-              </Card>
-            
-              <Card className="bg-[#e1edff] card" style={{ width: 'calc(32.33% - 10px)' }}>
-                <p className="text-[#c01c1c] pgh font-bold text-22">InActive Pharmacies</p>
-                <p className="text-[#c01c1c] pgh flex justify-end mr-10 font-bold text-30">
-                  {inActivePharmacy}
-                </p>
-              </Card>
-            </div>
-            )}
+            !cards &&
+            userDetails.userRole == 1 && <Cards />}
         </div>
       </Layout>
     </Layout>

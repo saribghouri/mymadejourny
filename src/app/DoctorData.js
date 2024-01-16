@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -16,12 +15,13 @@ const DoctorData = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
-  
-  const filteredDoctor = doctors ? doctors.filter((doctor) =>
-  doctor.userName.toLowerCase().includes(searchText.toLowerCase())
-) : [];
-  const [loading, setLoading] = useState(false);
 
+  const filteredDoctor = doctors
+    ? doctors.filter((doctor) =>
+        doctor.userName.toLowerCase().includes(searchText.toLowerCase())
+      )
+    : [];
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -150,7 +150,7 @@ const DoctorData = () => {
           )
         );
         message.success("User edited successfully");
-        setLoading(false)
+        setLoading(false);
       } else {
         console.error("Failed to edit user");
         message.error("Failed to edit user");
@@ -166,7 +166,7 @@ const DoctorData = () => {
     try {
       const token = Cookies.get("apiToken");
       console.log("Deleting user with ID:", userId);
-  
+
       const response = await fetch(
         `https://mymedjournal.blownclouds.com/api/delete-user/${userId}`,
         {
@@ -177,9 +177,9 @@ const DoctorData = () => {
           },
         }
       );
-  
+
       console.log("Response from delete API:", response);
-  
+
       if (response.ok) {
         message.success("Doctor deleted successfully");
         setDoctors((prevDoctors) =>
@@ -193,14 +193,14 @@ const DoctorData = () => {
       console.error("Error deleting user:", error);
     }
   };
-  
+
   const handleView = (doctor) => {
     setSelectedDoctor(doctor);
     setIsViewModalVisible(true);
   };
   return (
     <div>
-      <div className="flex justify-between pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[10px] mb-[20px]">
+      <div className="flex justify-between pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
         <h1 className="Doctors">Doctors</h1>
         <Input
           className="w-[300px] rounded-[40px]"
@@ -241,12 +241,13 @@ const DoctorData = () => {
         title="View Doctor"
         onCancel={() => setIsViewModalVisible(false)}
         footer={null}
-        className="custom-modal"
+        className="custom-modal text-center mb-[20px]"
       >
         {selectedDoctor && (
-          <div className="flex justify-center flex-col w-full">
+          <div className="w-full justify-center flex flex-col items-center">
             {selectedDoctor.profileImage && (
               <img
+                className="flex justify-center  w-[100px] h-[100px] object-cover items-center rounded-[50%]"
                 src={selectedDoctor.profileImage}
                 style={{
                   width: 100,
@@ -257,43 +258,41 @@ const DoctorData = () => {
                 alt="Profile"
               />
             )}
-            <div className="flex flex-col gap-[20px]">
-              <p>
+
+            <div className="flex flex-col gap-[20px] mt-[20px]">
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[110px]">Name:</span>
-                {selectedDoctor.userName}
-                <hr></hr>
+                <p> {selectedDoctor.userName}</p>
               </p>
 
-              <p>
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[50px]">Email:</span>
-                {selectedDoctor.emailAddress} <hr></hr>
+                <p> {selectedDoctor.emailAddress}</p>
               </p>
 
-              <p>
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[80px]">Experience:</span>
-                {selectedDoctor.noOfExperience} <hr></hr>
+                <p>{selectedDoctor.noOfExperience}</p>
               </p>
 
-              <p>
+              <p className="flex justify-between items-center">
                 <span className="font-bold mr-[60px]">Specialization:</span>
-                {selectedDoctor.specialization} <hr></hr>
+                <p>{selectedDoctor.specialization}</p>
               </p>
 
-              <p>
-                <span className="font-bold mr-[130px]">Age:</span>
-                {selectedDoctor.age} <hr></hr>
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[60px]">Specialization:</span>
+                <p>{selectedDoctor.age}</p>
               </p>
-
-              <p>
-                <span className="font-bold mr-[70px]">AffiliationNo:</span>
-                {selectedDoctor.affiliationNo} <hr></hr>
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[60px]">Specialization:</span>
+                <p>{selectedDoctor.affiliationNo} </p>
               </p>
             </div>
           </div>
         )}
       </Modal>
     </div>
-
   );
 };
 
