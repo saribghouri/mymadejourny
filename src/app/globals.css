@@ -170,3 +170,22 @@
   color: #000000 !important;
   font-size: 20px !important;
 }
+.ant-btn-sm{
+  background-color:#2361dd !important ;
+  color: #ffffff !important;
+}
+.modal-bhai >
+ .ant-modal-content{
+padding:  0px !important;
+ }
+.ant-modal-title{
+
+margin-bottom: 20px !important;
+}
+.card{
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  font-family: cursive;
+}
+.pgh{
+  font-family: cursive;
+}

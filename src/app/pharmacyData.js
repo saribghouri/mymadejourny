@@ -88,7 +88,19 @@ const PharmacyData = () => {
     setIsViewModalVisible(true);
   };
   const columns = [
+    
     { title: "Serial No", dataIndex: "serialNo", key: "serialNo" }, 
+    {
+      title: "Profile",
+      dataIndex: "profileImage",
+      key: "profileImage",
+      render: (text, record) => (
+        <img
+          src={text}
+          style={{ width: 50, height: 50, borderRadius: "50%" }}
+        />
+      ),
+    },
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
     {
@@ -117,15 +129,15 @@ const PharmacyData = () => {
       key: "delete",
       render: (id, record) => (
         <>
-          <EditOutlined type="link" onClick={() => handleEdit(record)} />
+          <EditOutlined className="text-[18px] text-[#2361dd]" type="link" onClick={() => handleEdit(record)} />
           <DeleteOutlined
-            className="text-[#990e0e] ml-[10px]"
+            className="text-[#990e0e] ml-[10px] text-[18px]"
             type="link"
             danger
             onClick={() => handleDelete(record.id)}
           />
           <EyeOutlined
-            className="text-[#1f9c40] ml-[10px]"
+            className="text-[#1f9c40] ml-[10px] text-[18px]"
             type="link"
             onClick={() => handleView(record)}
           />

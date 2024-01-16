@@ -207,21 +207,21 @@ const DoctorData = () => {
         const editMode = editingCategoryId === record.id;
         return (
           <>
-            <DeleteOutlined className="text-[#a82e2e]" onClick={() => handleDelete(record.id)} />
+            <DeleteOutlined className="text-[#a82e2e] text-[18px]" onClick={() => handleDelete(record.id)} />
             {editMode ? (
               <>
                 <span
-                  className="ml-[20px]"
+                  className="ml-[20px] text-[18px]"
                   onClick={() => handleSave(record.id)}
                 >
                   {saveIcon}
                 </span>
-                <span className="ml-[20px]" onClick={handleCancelEdit}>
+                <span className="ml-[20px] text-[18px]" onClick={handleCancelEdit}>
                   {cancelIcon}
                 </span>
               </>
             ) : (
-              <span className="ml-[20px]" onClick={() => handleEdit(record)}>
+              <span className="ml-[20px] text-[18px]" onClick={() => handleEdit(record)}>
                 {editIcon}
               </span>
             )}

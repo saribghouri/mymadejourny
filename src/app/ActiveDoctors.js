@@ -174,7 +174,7 @@ const ActiveDoctors = () => {
             onClick={() => handleDelete(record.id)}
           /> */}
           <EyeOutlined
-            className="text-[#1f9c40] ml-[10px]"
+            className="text-[#1f9c40] ml-[10px] text-[18px]"
             type="link"
             onClick={() => handleView(record)}
           />

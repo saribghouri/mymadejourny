@@ -99,18 +99,18 @@ const DoctorData = () => {
       render: (id, record) => (
         <div>
           <EditOutlined
-            className="text-[#2361dd] "
+            className="text-[#2361dd] text-[18px] "
             type="link"
             onClick={() => handleEdit(record)}
           />
           <DeleteOutlined
-            className="text-[#990e0e] ml-[10px]"
+            className="text-[#990e0e] ml-[10px] text-[18px]"
             type="link"
             danger
             onClick={() => handleDelete(record.id)}
           />
           <EyeOutlined
-            className="text-[#1f9c40] ml-[10px]"
+            className="text-[#1f9c40] ml-[10px] text-[18px]"
             type="link"
             onClick={() => handleView(record)}
           />
@@ -293,6 +293,7 @@ const DoctorData = () => {
         )}
       </Modal>
     </div>
+
   );
 };
 
