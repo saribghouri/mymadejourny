@@ -259,11 +259,11 @@ const ActivePharmacy = () => {
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">Specialization:</span>
+                <span className="font-bold mr-[60px]">age:</span>
                 <p>{selectedPharmacies.age}</p>
               </p>
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">Specialization:</span>
+                <span className="font-bold mr-[60px]">affiliationNo:</span>
                 <p>{selectedPharmacies.affiliationNo} </p>
               </p>
             </div>

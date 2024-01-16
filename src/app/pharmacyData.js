@@ -239,7 +239,7 @@ const PharmacyData = () => {
                 <p>{selectedPharmacy.age}</p>
               </p>
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">Specialization:</span>
+                <span className="font-bold mr-[60px]">affiliationNo:</span>
                 <p>{selectedPharmacy.affiliationNo} </p>
               </p>
             </div>

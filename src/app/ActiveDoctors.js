@@ -247,11 +247,11 @@ const ActiveDoctors = () => {
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">Specialization:</span>
+                <span className="font-bold mr-[60px]">age:</span>
                 <p>{selectedDoctor.age}</p>
               </p>
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">Specialization:</span>
+                <span className="font-bold mr-[60px]">affiliationNo:</span>
                 <p>{selectedDoctor.affiliationNo} </p>
               </p>
             </div>
