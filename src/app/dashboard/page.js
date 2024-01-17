@@ -477,7 +477,7 @@ const App = () => {
       const response = await fetch(
         "https://mymedjournal.blownclouds.com/api/logout",
         {
-          method: "POST",
+          method: "GET",
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

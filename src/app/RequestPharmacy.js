@@ -118,12 +118,13 @@ const RequestPharmacy = () => {
       if (response.ok) {
         const updatedpharmacy = data.map((pharmacy) =>
           pharmacy.id === userId
-            ? { ...pharmacy, rejecteReason: rejecteReason } 
+            ? { ...pharmacy, rejecteReason: rejecteReason }
             : pharmacy
         );
-
+  
         setData(updatedpharmacy);
         setRejectModalVisible(false);
+        setRejecteReason("")
         console.log("pharmacy rejected successfully");
       } else {
         console.error("Failed to reject pharmacy. Status:", response.status);
@@ -223,7 +224,7 @@ const RequestPharmacy = () => {
   return (
     <div>
     <div className="flex justify-between pl-[20px] pr-[20px] items-center mt-[20px] mb-[20px]">
-      <h1 className="pharmacy-Requests">pharmacy Requests</h1>
+      <h1 className="pharmacy-Requests">Pharmacy Requests</h1>
       <Input
         className="w-[300px] rounded-[40px]"
         placeholder="Input search text"

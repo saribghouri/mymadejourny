@@ -3,7 +3,7 @@ import {
   EditOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import {  DatePicker, Form, Input,  Modal,  Table, TimePicker, message } from "antd";
+import {  DatePicker, Form, Input,  Modal,  Popconfirm,  Table, TimePicker, message } from "antd";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
@@ -154,12 +154,16 @@ const Appointments = () => {
             type="link"
             onClick={() => handleEdit(record)}
           />
-          <DeleteOutlined
-            className="text-[#990e0e] ml-[10px]"
-            type="link"
-            danger
-            onClick={() => handleDelete(record.id)}
-          />
+          <Popconfirm
+            title="Are you sure you want to delete this doctor?"
+            onConfirm={() => handleDelete(record.id)}
+          >
+            <DeleteOutlined
+              className="text-[#990e0e] ml-[10px] text-[18px]"
+              type="link"
+              danger
+            />
+          </Popconfirm>
         </div>
       ),
     },

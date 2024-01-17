@@ -227,10 +227,10 @@ const ActivePharmacy = () => {
       <Modal
         width={300}
         open={modalVisible}
-        title="View Doctor"
+        title="View Pharmacy"
         onCancel={() => setModalVisible(false)}
         footer={null}
-        className="custom-modal"
+        className="custom-modal text-center"
       >
         {selectedPharmacies && (
           <div className="w-full justify-center flex flex-col items-center">

@@ -106,7 +106,7 @@ const Cards = () => {
             <p className="text-[#2361dd] pgh font-bold text-22">
               Total Doctors
             </p>
-            <p className="text-[#2361dd] pgh flex justify-end mr-10 font-bold text-30">
+            <p className="text-[#2361dd]  flex justify-end mr-10 font-bold text-30">
               {doctorsCount}
             </p>
           </Card>
@@ -118,7 +118,7 @@ const Cards = () => {
             <p className="text-[#24ac18] pgh font-bold text-22">
               Active Doctors
             </p>
-            <p className="text-[#24ac18] pgh flex justify-end mr-10 font-bold text-30">
+            <p className="text-[#24ac18] flex justify-end mr-10 font-bold text-30">
               {activeDoctors}
             </p>
           </Card>
@@ -130,7 +130,7 @@ const Cards = () => {
             <p className="text-[#c01c1c] pgh font-bold text-22">
               InActive Doctors
             </p>
-            <p className="text-[#c01c1c] pgh flex justify-end mr-10 font-bold text-30">
+            <p className="text-[#c01c1c]  flex justify-end mr-10 font-bold text-30">
               {inActiveDoctors}
             </p>
           </Card>
@@ -142,7 +142,7 @@ const Cards = () => {
             <p className="text-[#2361dd] pgh font-bold text-22">
               Total Pharmacies
             </p>
-            <p className="text-[#2361dd] pgh flex justify-end mr-10 font-bold text-30">
+            <p className="text-[#2361dd]  flex justify-end mr-10 font-bold text-30">
               {pharmacyCount}
             </p>
           </Card>
@@ -154,7 +154,7 @@ const Cards = () => {
             <p className="text-[#24ac18] pgh font-bold text-22">
               Active Pharmacies
             </p>
-            <p className="text-[#24ac18] pgh flex justify-end mr-10 font-bold text-30">
+            <p className="text-[#24ac18]  flex justify-end mr-10 font-bold text-30">
               {activePharmacy}
             </p>
           </Card>
@@ -166,7 +166,7 @@ const Cards = () => {
             <p className="text-[#c01c1c] pgh font-bold text-22">
               InActive Pharmacies
             </p>
-            <p className="text-[#c01c1c] pgh flex justify-end mr-10 font-bold text-30">
+            <p className="text-[#c01c1c] flex justify-end mr-10 font-bold text-30">
               {inActivePharmacy}
             </p>
           </Card>

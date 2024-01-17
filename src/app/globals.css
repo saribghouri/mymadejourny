@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .inputWithBorder {
   border-bottom: 3px solid black;
 }
@@ -138,7 +139,7 @@
 .custom-modal .ant-modal-title {
   color: #2361dd;
   font-size: 22px;
-  font-family: cursive;
+  font-family: 'Aristotelica Display Trial', sans-serif; 
   background-color: #f2f7ff !important;
 }
 
@@ -147,12 +148,12 @@
 }
 .ant-modal-title {
   background-color: #f2f7ff !important;
-  font-family: cursive;
+  font-family: 'Aristotelica Display Trial', sans-serif; 
   font-size: 22px !important;
   color: #2361dd !important;
 }
 .categorie {
-  font-family: cursive;
+  font-family: 'Aristotelica Display Trial', sans-serif; 
 }
 
 .ant-upload {
@@ -166,9 +167,7 @@
 .Doctor-Requests,
 .pharmacy-Requests,
 .Doctors {
-  font-family: cursive;
-  color: #000000 !important;
-  font-size: 20px !important;
+  font-family: 'Aristotelica Display Trial', sans-serif;  font-size: 22px !important;
 }
 .ant-btn-sm{
   background-color:#2361dd !important ;
@@ -184,8 +183,11 @@ margin-bottom: 20px !important;
 }
 .card{
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  font-family: cursive;
+  /* font-family: 'Aristotelica Display Trial', sans-serif; */
+
 }
 .pgh{
-  font-family: cursive;
+  font-family: 'Aristotelica Display Trial', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
 }

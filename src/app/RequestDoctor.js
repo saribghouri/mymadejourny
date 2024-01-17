@@ -145,6 +145,7 @@ const RequestDoctor = () => {
 
       if (response.ok) {
         setRejectModalVisible(false);
+        setRejecteReason("")
         console.log("Doctor rejected successfully");
       } else {
         console.error("Failed to reject doctor. Status:", response.status);

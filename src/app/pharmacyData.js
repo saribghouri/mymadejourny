@@ -5,7 +5,7 @@ import {
   LoadingOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Spin, Table, message } from "antd";
+import { Button, Form, Input, Modal, Popconfirm, Spin, Table, message } from "antd";
 
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
@@ -133,12 +133,16 @@ const PharmacyData = () => {
             type="link"
             onClick={() => handleEdit(record)}
           />
-          <DeleteOutlined
-            className="text-[#990e0e] ml-[10px] text-[18px]"
-            type="link"
-            danger
-            onClick={() => handleDelete(record.id)}
-          />
+            <Popconfirm
+            title="Are you sure you want to delete this pharmacy?"
+            onConfirm={() => handleDelete(record.id)}
+          >
+            <DeleteOutlined
+              className="text-[#990e0e] ml-[10px] text-[18px]"
+              type="link"
+              danger
+            />
+          </Popconfirm>
           <EyeOutlined
             className="text-[#1f9c40] ml-[10px] text-[18px]"
             type="link"
