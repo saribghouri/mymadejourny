@@ -1,31 +1,29 @@
-import {
-  EyeOutlined,
-  LoadingOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import { Button, Form, Input, Modal, Spin, Table } from "antd";
+import { EyeOutlined, SearchOutlined } from "@ant-design/icons";
+import { Button, Input, Modal, Table } from "antd";
 
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-const ActivePharmacy = () => {
-  const [form] = Form.useForm();
-  const [loading, setLoading] = useState(true);
-  const [Pharmacies, setPharmacies] = useState([]);
-  const [selectedPharmacies, setSelectedPharmacies] = useState(null);
+const Users = () => {
+  const [loading, setLoading] = useState(false);
+  const [doctors, setDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const filteredDoctor =
+    doctors && doctors.length > 0
+      ? doctors.filter((doctor) =>
+          doctor.userName.toLowerCase().includes(searchText.toLowerCase())
+        )
+      : [];
 
-  const filteredPharmacies = Pharmacies
-    ? Pharmacies.filter((pharmacy) =>
-        pharmacy.userName.toLowerCase().includes(searchText.toLowerCase())
-      )
-    : [];
+  console.log("doctors", doctors);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = Cookies.get("apiToken");
         const response = await fetch(
-          "https://mymedjournal.blownclouds.com/api/active/fatch/Pharmacies",
+          "https://mymedjournal.blownclouds.com/api/all/user/fetch",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -36,14 +34,13 @@ const ActivePharmacy = () => {
 
         if (response.ok) {
           const data = await response.json();
-
-          console.log("Pharmacies fetched successfully:", data);
-          setPharmacies(data.active_Pharmacie);
+          console.log("Doctors fetched successfully:", data);
+          setDoctors(data.all_users["data"]);
         } else {
-          console.error("Failed to fetch pharmacies. Status:", response.status);
+          console.error("Failed to fetch doctors");
         }
       } catch (error) {
-        console.error("Error fetching pharmacies:", error);
+        console.error("Error fetching doctors:", error);
       } finally {
         setLoading(false);
       }
@@ -51,30 +48,17 @@ const ActivePharmacy = () => {
 
     fetchData();
   }, []);
-
-  const datas = Array.isArray(Pharmacies)
-    ? Pharmacies.map((Pharmacies) => ({
-        key: Pharmacies.id.toString(),
-        id: Pharmacies.id,
-        userRole: Pharmacies.userRole,
-        doctorCategories: Pharmacies.doctorCategories,
-        pharmacieName: Pharmacies.pharmacieName,
-        emailAddress: Pharmacies.emailAddress,
-      }))
-    : [];
-  console.log("data", datas);
   const handleView = (doctor) => {
-    setSelectedPharmacies(doctor);
+    setSelectedDoctor(doctor);
     setModalVisible(true);
   };
+ 
+  const dataSourceWithSerial = filteredDoctor.map((doctorData, index) => ({
+    ...doctorData,
+    key: doctorData.id,
+    serialNumber: index + 1,
+  }));
 
-  const dataSourceWithSerial = filteredPharmacies.map(
-    (pharmacyData, index) => ({
-      ...pharmacyData,
-      key: pharmacyData.id,
-      serialNumber: index + 1,
-    })
-  );
   const columns = [
     { title: "No", dataIndex: "serialNumber", key: "serialNumber" }, // New column
 
@@ -92,6 +76,7 @@ const ActivePharmacy = () => {
 
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
+   
 
     {
       title: "Action",
@@ -99,17 +84,7 @@ const ActivePharmacy = () => {
       key: "action",
       render: (id, record) => (
         <div>
-          {/* <EditOutlined
-            className="text-[#2361dd] "
-            type="link"
-            onClick={() => handleEdit(record)}
-          />
-          <DeleteOutlined
-            className="text-[#990e0e] ml-[10px]"
-            type="link"
-            danger
-            onClick={() => handleDelete(record.id)}
-          /> */}
+       
           <EyeOutlined
             className="text-[#1f9c40] ml-[10px] text-[18px]"
             type="link"
@@ -122,8 +97,8 @@ const ActivePharmacy = () => {
 
   return (
     <div>
-      <div className="flex justify-between pl-[20px] pr-[20px] items-center mt-[10px] mb-[20px]">
-        <h1 className="Active-Pharmacy">Active Pharmacy</h1>
+      <div className="flex justify-between pl-[10px] pr-[10px] ml-[16px] mr-[16px] items-center mt-[20px] mb-[20px]">
+        <h1 className="Doctors"> Users </h1>
         <Input
           className="w-[300px] rounded-[40px]"
           placeholder="Input search text"
@@ -136,25 +111,25 @@ const ActivePharmacy = () => {
       <Table
         columns={columns}
         loading={loading}
-        dataSource={dataSourceWithSerial.map((Pharmacies) => ({
-          ...Pharmacies,
-          key: Pharmacies.id,
+        dataSource={dataSourceWithSerial.map((doctor) => ({
+          ...doctor,
+          key: doctor.id,
         }))}
       />
       <Modal
         width={300}
         open={modalVisible}
-        title="View Pharmacy"
+        title="Users"
         onCancel={() => setModalVisible(false)}
         footer={null}
-        className="custom-modal text-center"
+        className="custom-modal text-center mb-[20px]"
       >
-        {selectedPharmacies && (
+        {selectedDoctor && (
           <div className="w-full justify-center flex flex-col items-center">
-            {selectedPharmacies.profileImage && (
+            {selectedDoctor.profileImage && (
               <img
                 className="flex justify-center  w-[100px] h-[100px] object-cover items-center rounded-[50%]"
-                src={selectedPharmacies.profileImage}
+                src={selectedDoctor.profileImage}
                 style={{
                   width: 100,
                   height: 100,
@@ -164,25 +139,29 @@ const ActivePharmacy = () => {
                 alt="Profile"
               />
             )}
-            <div className="flex flex-col gap-[20px] mt-[20px]">
+           <div className="flex flex-col gap-[20px] mt-[20px]">
               <p className="flex justify-between items-center">
                 <span className="font-bold mr-[110px]">Name:</span>
-                <p> {selectedPharmacies.userName}</p>
+                <p> {selectedDoctor.userName}</p>
               </p>
 
               <p className="flex justify-between items-center">
                 <span className="font-bold mr-[50px]">Email:</span>
-                <p> {selectedPharmacies.emailAddress}</p>
+                <p> {selectedDoctor.emailAddress}</p>
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">age:</span>
-                <p>{selectedPharmacies.age}</p>
+                <span className="font-bold mr-[80px]">Phone No:</span>
+                <p>{selectedDoctor.phoneNo}</p>
               </p>
+
+
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">affiliationNo:</span>
-                <p>{selectedPharmacies.affiliationNo} </p>
+                <span className="font-bold mr-[60px]">Age:</span>
+                <p>{selectedDoctor.age}</p>
               </p>
+             
+          
             </div>
           </div>
         )}
@@ -191,4 +170,4 @@ const ActivePharmacy = () => {
   );
 };
 
-export default ActivePharmacy;
+export default Users;

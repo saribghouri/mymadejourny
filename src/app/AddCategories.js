@@ -107,9 +107,9 @@ const AddCategories = () => {
 
   return (
     <div>
-      {category ? (
+      {/* {category ? (
         <ShowCategories />
-      ) : (
+      ) : ( */}
         <div className="border bg-[#fff] w-[60%] mx-auto rounded-[10px] mt-[40px] mb-[20px]">
           <div className="bg-[#2361dd] justify-between flex items-center h-[100px] mb-[20px] rounded-t-[10px] w-[100%]">
             <h1 className="text-white font-bold text-[24px] ml-[20px] categorie">
@@ -176,78 +176,10 @@ const AddCategories = () => {
             </div>
           </Form>
         </div>
-      )}
+      {/* )} */}
     </div>
   );
 };
 
 export default AddCategories;
 
-{/* <Modal
-title="Edit Appointment"
-visible={editModalVisible}
-onCancel={handleEditCancel}
-footer={[
-  <Button key="back" onClick={handleEditCancel}>
-    Cancel
-  </Button>,
-  <Button key="submit" type="primary" onClick={handleEditSubmit}>
-    Save Changes
-  </Button>,
-]}
->
-<Form
-  name="editAppointmentForm"
-  initialValues={{ ...editingAppointment }}
-  onFinish={handleEditSubmit}
->
-  <Form.Item name="appointmentday" label="Appointment Day">
-    <Input />
-  </Form.Item>
-  <Form.Item name="appointmenttime" label="Appointment Time">
-    <Input />
-  </Form.Item>
-</Form>
-</Modal>
-
-
-
-
-const handleEditSubmit = async (values) => {
-  try {
-    const clonedValues = JSON.parse(JSON.stringify(values));
-
-    const token = Cookies.get("apiToken");
-    const response = await fetch(
-      `https://mymedjournal.blownclouds.com/api/appointment/${editingAppointment.id}`,
-      {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(clonedValues),
-      }
-    );
-
-    if (response.ok) {
-      message.success("Appointment edited successfully");
-      setDoctors((prevAppointments) =>
-        prevAppointments.map((appointment) =>
-          appointment.id === editingAppointment.id
-            ? { ...appointment, ...clonedValues }
-            : appointment
-        )
-      );
-      setEditModalVisible(false);
-    } else {
-      console.error(
-        "Failed to edit appointment:",
-        response.status,
-        response.statusText
-      );
-    }
-  } catch (error) {
-    console.error("Error editing appointment:", error);
-  }
-}; */}

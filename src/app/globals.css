@@ -4,7 +4,7 @@
 
 /* @import url("public\assserts\FONTS\aristrotel\AristotelicaSmallCaps-Regular.ttf"); */
 @font-face {
-  font-family: myFirstFont;
+  font-family: sans-serif;
   src: url(Aristotelica\ Display\ DemiBold\ Trial.ttf);
   weight: 400
 }
@@ -27,6 +27,8 @@
 }
 .ant-btn {
   border: none !important;
+ font-family: sans-serif;
+  padding-top: 7px;
 }
 
 .ant-menu-item-selected {
@@ -34,6 +36,7 @@
   background-color: #ffffff !important;
   color: #2361dd !important;
   margin-left: 8px !important;
+  
   border-bottom-left-radius: 20px !important;
   border-top-left-radius: 20px !important;
   border-top-right-radius: 0px !important;
@@ -43,7 +46,7 @@
   background-color: #ffffff !important;
   color: #2361dd !important;
   margin-left: 8px !important;
-
+ font-family: sans-serif;
   margin-left: 8px !important;
   border-bottom-left-radius: 20px !important;
   border-top-left-radius: 20px !important;
@@ -52,11 +55,12 @@
 }
 .ant-menu-item {
   margin-left: 8px !important;
+ font-family: sans-serif;
 }
 .ant-menu-submenu-title:hover {
   color: #2361dd !important;
   background-color: #ffffff !important;
-
+ font-family: sans-serif;
   margin-left: 8px !important;
   border-bottom-left-radius: 20px !important;
   border-top-left-radius: 20px !important;
@@ -65,6 +69,7 @@
 }
 .ant-menu-submenu-title {
   margin-left: 8px !important;
+ font-family: sans-serif;
 }
 
 .ant-menu-submenu-title-selected {
@@ -74,9 +79,11 @@
 
 .ant-select-selector {
   height: 40px !important;
+ font-family: sans-serif;
 }
 #loginForm_gender_help {
   margin-top: 8px !important;
+ font-family: sans-serif;
 }
 .pharmacy-img {
   width: 40px;
@@ -86,12 +93,15 @@
 
 .ant-menu-inline {
   background-color: transparent !important;
+ font-family: sans-serif;
 }
 .ant-layout-sider-trigger {
   display: none !important;
+ font-family: sans-serif;
 }
 .anticon-menu-fold {
   color: white !important;
+ font-family: sans-serif;
 }
 .ant-table-thead {
   background-color: #2361dd !important;
@@ -100,6 +110,7 @@
 .ant-table-thead th {
   background-color: #2361dd !important;
   color: #ffffff !important;
+ font-family: sans-serif;
 }
 .ant-table-wrapper {
   margin-left: 20px !important;
@@ -108,9 +119,11 @@
 .ant-menu-dark {
   background-color: #2361dd !important;
   color: #ffffff !important;
+ font-family: sans-serif;
 }
 .anticon-menu-unfold {
   color: #ffffff !important;
+ font-family: sans-serif;
 }
 .ant-menu-inline-collapsed {
   background-color: #2361dd !important;
@@ -131,10 +144,12 @@
   background-color: #2361dd !important;
   color: #ffffff !important;
   border-radius: none !important;
+ font-family: sans-serif;
 }
 .ant-tooltip {
   background-color: #2361dd !important;
   color: #ffffff !important;
+ font-family: sans-serif;
 }
 .ant-menu-inline-collapsed-tooltip {
   background-color: #2361dd !important;
@@ -148,19 +163,23 @@
   font-size: 22px;
   font-family: "Aristotelica Display Trial", sans-serif;
   background-color: #f2f7ff !important;
+ font-family: sans-serif;
 }
 
 .ant-modal-content {
   background-color: #f2f7ff !important;
+  
 }
 .ant-modal-title {
   background-color: #f2f7ff !important;
   font-family: "Aristotelica Display Trial", sans-serif;
   font-size: 22px !important;
   color: #2361dd !important;
+ font-family: sans-serif;
 }
 .categorie {
   font-family: "Aristotelica Display Trial", sans-serif;
+ font-family: sans-serif;
 }
 
 .ant-upload {
@@ -174,25 +193,32 @@
 .Doctor-Requests,
 .pharmacy-Requests,
 .Doctors {
-  font-family: myFirstFont;
+  font-family: sans-serif;
   font-size: 22px !important;
 }
 .ant-btn-sm {
   background-color: #2361dd !important ;
   color: #ffffff !important;
+font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .modal-bhai > .ant-modal-content {
   padding: 0px !important;
+ font-family: sans-serif;
 }
 .ant-modal-title {
   margin-bottom: 20px !important;
+ font-family: sans-serif;
 }
 .card {
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   /* font-family: 'Aristotelica Display Trial', sans-serif; */
 }
 .pgh {
-  font-family: myFirstFont;
-  font-size: 20px;
-  font-weight: 900;
+  
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+.font{
+  font-family: sans-serif;
 }

@@ -87,6 +87,67 @@ const PharmacyData = () => {
     setSelectedPharmacy(pharmacy);
     setIsViewModalVisible(true);
   };
+  const handleActivatePharmacy = async (userId) => {
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        `https://mymedjournal.blownclouds.com/api/active/fatch/Pharmacies?userId=${userId}&isActives=active`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("response", response);
+      if (response.ok) {
+        const updatedPharmacies = Pharmacies.map((Pharmacies) =>
+          Pharmacies.id === userId
+            ? { ...Pharmacies, isActives: "1" }
+            : Pharmacies
+        );
+        setPharmacies(updatedPharmacies);
+      } else {
+        console.error("Error activating Pharmacies. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error activating Pharmacies:", error);
+    }
+  };
+
+  const handleDeactivatePharmacy = async (userId) => {
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        `https://mymedjournal.blownclouds.com/api/active/fatch/Pharmacies?userId=${userId}&isActives=inactive`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("response", response);
+
+      if (response.ok) {
+        const updatedPharmacies = Pharmacies.map((Pharmacies) =>
+          Pharmacies.id === userId
+            ? { ...Pharmacies, isActives: "0" }
+            : Pharmacies
+        );
+        setPharmacies(updatedPharmacies);
+      } else {
+        console.error(
+          "Error deactivating Pharmacies. Status:",
+          response.status
+        );
+      }
+    } catch (error) {
+      console.error("Error deactivating Pharmacies:", error);
+    }
+  };
   const columns = [
     { title: "Serial No", dataIndex: "serialNo", key: "serialNo" },
     {
@@ -106,8 +167,24 @@ const PharmacyData = () => {
       title: "Status",
       dataIndex: "isActives",
       key: "isActives",
-      render: (isActives, record) => (
-        <span>{isActives === "1" ? "Active" : "inacitve"}</span>
+      render: (_, record) => (
+        <>
+          {record.isActives === "1" ? (
+            <Button
+              className="bg-[#a4a5a5] text-white"
+              onClick={() => handleDeactivatePharmacy(record.id)}
+            >
+              Inactive
+            </Button>
+          ) : (
+            <Button
+              className="bg-[#148644] text-white"
+              onClick={() => handleActivatePharmacy(record.id)}
+            >
+              Active
+            </Button>
+          )}
+        </>
       ),
     },
     {
@@ -229,21 +306,21 @@ const PharmacyData = () => {
 
             <div className="flex flex-col gap-[20px] mt-[20px]">
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[110px]">Name:</span>
+                <span className="font-bold mr-[110px] ">Name:</span>
                 <p> {selectedPharmacy.userName}</p>
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[50px]">Email:</span>
+                <span className="font-bold mr-[50px] ">Email:</span>
                 <p> {selectedPharmacy.emailAddress}</p>
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">Specialization:</span>
+                <span className="font-bold mr-[60px] ">Age:</span>
                 <p>{selectedPharmacy.age}</p>
               </p>
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">affiliationNo:</span>
+                <span className="font-bold mr-[60px] ">affiliationNo:</span>
                 <p>{selectedPharmacy.affiliationNo} </p>
               </p>
             </div>
@@ -314,39 +391,39 @@ const EditUserForm = ({ doctor, onSave }) => {
 
   return (
     <Form form={form} layout="vertical" onFinish={(values) => onSave(values)}>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">UserName</label>
+      <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">UserName</label>
       <Form.Item name="userName" rules={[{ required: true }]}>
         <Input className="border" placeholder="userName" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">
+      <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">
         AffiliationNo
       </label>
       <Form.Item name="affiliationNo" rules={[{ required: true }]}>
         <Input className="border" placeholder="affiliationNo" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">
+      <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">
         Experience
       </label>
       <Form.Item name="noOfExperience" rules={[{ required: true }]}>
         <Input className="border" placeholder="noOfExperience" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">
+      <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">
         Specialization
       </label>
       <Form.Item name="specialization" rules={[{ required: true }]}>
         <Input className="border" placeholder="specialization" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">Age</label>
+      <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">Age</label>
       <Form.Item name="age" rules={[{ required: true }]}>
         <Input className="border" placeholder="age" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">Gender</label>
+      <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">Gender</label>
       <Form.Item name="gender" rules={[{ required: true }]}>
         <Input className="border" placeholder="gender" />
       </Form.Item>
 
       <Form.Item>
-        <Button className="bg-[#2361dd] text-white" htmlType="submit">
+        <Button className="bg-[#2361dd] !text-white  pt-[5px]" htmlType="submit">
           Save
         </Button>
       </Form.Item>

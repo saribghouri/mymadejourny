@@ -52,60 +52,7 @@ const ActiveDoctors = () => {
     setSelectedDoctor(doctor);
     setModalVisible(true);
   };
-  const handleActivateDoctor = async (userId) => {
-    try {
-      const token = Cookies.get("apiToken");
-      const response = await fetch(
-        `https://mymedjournal.blownclouds.com/api/active/fatch/doctor?userId=${userId}&isActives=active`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("response", response);
-      if (response.ok) {
-        const updatedDoctors = doctors.map((doctor) =>
-          doctor.id === userId ? { ...doctor, isActives: "1" } : doctor
-        );
-        setDoctors(updatedDoctors);
-      } else {
-        console.error("Error activating doctor. Status:", response.status);
-      }
-    } catch (error) {
-      console.error("Error activating doctor:", error);
-    }
-  };
-
-  const handleDeactivateDoctor = async (userId) => {
-    try {
-      const token = Cookies.get("apiToken");
-      const response = await fetch(
-        `https://mymedjournal.blownclouds.com/api/active/fatch/doctor?userId=${userId}&isActives=inactive`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log("response", response);
-
-      if (response.ok) {
-        const updatedDoctors = doctors.map((doctor) =>
-          doctor.id === userId ? { ...doctor, isActives: "0" } : doctor
-        );
-        setDoctors(updatedDoctors);
-      } else {
-        console.error("Error deactivating doctor. Status:", response.status);
-      }
-    } catch (error) {
-      console.error("Error deactivating doctor:", error);
-    }
-  };
+ 
   const dataSourceWithSerial = filteredDoctor.map((doctorData, index) => ({
     ...doctorData,
     key: doctorData.id,
@@ -129,30 +76,7 @@ const ActiveDoctors = () => {
 
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
-    {
-      title: "Status",
-      dataIndex: "isActives",
-      key: "isActives",
-      render: (_, record) => (
-        <>
-          {record.isActives === "1" ? (
-            <Button
-              className="bg-[#a4a5a5] !text-white"
-              onClick={() => handleDeactivateDoctor(record.id)}
-            >
-              Inactive
-            </Button>
-          ) : (
-            <Button
-              className="bg-[#148644] !text-white"
-              onClick={() => handleActivateDoctor(record.id)}
-            >
-              Active
-            </Button>
-          )}
-        </>
-      ),
-    },
+   
 
     {
       title: "Action",
@@ -160,17 +84,7 @@ const ActiveDoctors = () => {
       key: "action",
       render: (id, record) => (
         <div>
-          {/* <EditOutlined
-            className="text-[#2361dd] "
-            type="link"
-            onClick={() => handleEdit(record)}
-          />
-          <DeleteOutlined
-            className="text-[#990e0e] ml-[10px]"
-            type="link"
-            danger
-            onClick={() => handleDelete(record.id)}
-          /> */}
+       
           <EyeOutlined
             className="text-[#1f9c40] ml-[10px] text-[18px]"
             type="link"

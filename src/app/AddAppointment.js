@@ -4,9 +4,11 @@ import { Form, Input, Button, message } from "antd";
 import { TimePicker } from "antd";
 
 import Cookies from "js-cookie";
+import Appointments from "./Appointments";
 const AddAppointment = () => {
   const [form] = Form.useForm();
   const [initialData, setInitialData] = useState({});
+  const [category, setCategory] = useState(false);
 
   const onFinish = async (values) => {
     try {
@@ -32,6 +34,7 @@ const AddAppointment = () => {
   
       if (response.ok) {
         const jsonResponse = await response.json(); 
+        setCategory(true)
         message.success("Appointment added successfully");
         console.log("Appointment added successfully", jsonResponse);
       } else {
@@ -46,6 +49,9 @@ const AddAppointment = () => {
     console.log("Failed:", errorInfo);
   };
   return (
+    <div>
+   
+
     <div className="flex  items-center  justify-center flex-col h-[400px]  ">
       <h1 className="  text-[#2361dd] flex justify-start text-start items-start w-[370px] mb-[20px] font-bold text-[20px]">Add Appointment</h1>
       <Form className="bg-[#c2dff7] rounded-[10px] p-[20px] max-w-[800px] h-[250px]  flex flex-col justify-center items-center"
@@ -57,12 +63,12 @@ const AddAppointment = () => {
         onFinishFailed={onFinishFailed}
         initialValues={initialData}
         
-      >
+        >
         <Form.Item
           // label="Appointment day"
           name="appointmentday"
           rules={[{ required: true, message: "Please enter Appointment day!" }]}
-        >
+          >
           <Input placeholder="Appointment day"   className="w-[350px]"/>
         </Form.Item>
 
@@ -72,13 +78,13 @@ const AddAppointment = () => {
           rules={[
             { required: true, message: "Please select appointment time!" },
           ]}
-        >
+          >
           <TimePicker.RangePicker
             className="w-[350px]"
             format="HH:mm"
             minuteStep={15}
             // renderExtraFooter={() => " to "}
-          />
+            />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 18, span: 18 }}>
           <Button  className="bg-[#2361dd] text-white flex justify-end" htmlType="submit">
@@ -87,6 +93,8 @@ const AddAppointment = () => {
         </Form.Item>
       </Form>
     </div>
+     
+            </div>
   );
 };
 

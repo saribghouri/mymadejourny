@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className='over-all-body'>
         {loading ? (
           <Spin
           className="flex justify-center w-[100%] h-[500px] items-center"

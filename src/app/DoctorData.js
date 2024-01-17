@@ -53,6 +53,59 @@ const DoctorData = () => {
 
     fetchData();
   }, []);
+  const handleActivateDoctor = async (userId) => {
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        `https://mymedjournal.blownclouds.com/api/active/fatch/doctor?userId=${userId}&isActives=active`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("response", response);
+      if (response.ok) {
+        const updatedDoctors = doctors.map((doctor) =>
+          doctor.id === userId ? { ...doctor, isActives: "1" } : doctor
+        );
+        setDoctors(updatedDoctors);
+      } else {
+        console.error("Error activating doctor. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error activating doctor:", error);
+    }
+  };
+  const handleDeactivateDoctor = async (userId) => {
+    try {
+      const token = Cookies.get("apiToken");
+      const response = await fetch(
+        `https://mymedjournal.blownclouds.com/api/active/fatch/doctor?userId=${userId}&isActives=inactive`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("response", response);
+
+      if (response.ok) {
+        const updatedDoctors = doctors.map((doctor) =>
+          doctor.id === userId ? { ...doctor, isActives: "0" } : doctor
+        );
+        setDoctors(updatedDoctors);
+      } else {
+        console.error("Error deactivating doctor. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error deactivating doctor:", error);
+    }
+  };
   const dataSourceWithSerial = filteredDoctor.map((doctorData, index) => ({
     ...doctorData,
     key: doctorData.id,
@@ -74,12 +127,36 @@ const DoctorData = () => {
 
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
+    // {
+    //   title: "Status",
+    //   dataIndex: "isActives",
+    //   key: "isActives",
+    //   render: (isActives) => (
+    //     <span>{isActives === "1" ? "Active" : "Inactive"}</span>
+    //   ),
+    // },
     {
       title: "Status",
       dataIndex: "isActives",
       key: "isActives",
-      render: (isActives) => (
-        <span>{isActives === "1" ? "Active" : "Inactive"}</span>
+      render: (_, record) => (
+        <>
+          {record.isActives === "1" ? (
+            <Button
+              className="bg-[#a4a5a5] !text-white"
+              onClick={() => handleDeactivateDoctor(record.id)}
+            >
+              Inactive
+            </Button>
+          ) : (
+            <Button
+              className="bg-[#148644] !text-white"
+              onClick={() => handleActivateDoctor(record.id)}
+            >
+              Active
+            </Button>
+          )}
+        </>
       ),
     },
     {
@@ -268,35 +345,35 @@ const DoctorData = () => {
 
             <div className="flex flex-col gap-[20px] mt-[20px]">
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[110px]">Name:</span>
+                <span className="font-bold mr-[110px] font">Name:</span>
                 <p> {selectedDoctor.userName}</p>
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[50px]">Email:</span>
+                <span className="font-bold mr-[50px] ">Email:</span>
                 <p> {selectedDoctor.emailAddress}</p>
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[80px]">Experience:</span>
+                <span className="font-bold mr-[80px] ">Experience:</span>
                 <p>{selectedDoctor.noOfExperience}</p>
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">Specialization:</span>
+                <span className="font-bold mr-[60px] ">Specialization:</span>
                 <p>{selectedDoctor.specialization}</p>
               </p>
 
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">age:</span>
+                <span className="font-bold mr-[60px] ">age:</span>
                 <p>{selectedDoctor.age}</p>
               </p>
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">affiliationNo:</span>
+                <span className="font-bold mr-[60px] ">affiliationNo:</span>
                 <p>{selectedDoctor.affiliationNo} </p>
               </p>
               <p className="flex justify-between items-center">
-                <span className="font-bold mr-[60px]">Categories:</span>
+                <span className="font-bold mr-[60px] ">Categories:</span>
                 <p>{selectedDoctor.doctorCategoryName} </p>
               </p>
             </div>
@@ -316,40 +393,40 @@ const EditUserForm = ({ doctor, onSave }) => {
 
   return (
     <Form form={form} layout="vertical" onFinish={(values) => onSave(values)}>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">UserName</label>
+      <label className="mb-[5px] font-semi-bold text-[#868585] font ">UserName</label>
       <Form.Item name="userName" rules={[{ required: true }]}>
         <Input className="border" placeholder="userName" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">
+      <label className="mb-[5px] font-semi-bold text-[#868585] font">
         AffiliationNo
       </label>
       <Form.Item name="affiliationNo" rules={[{ required: true }]}>
         <Input className="border" placeholder="affiliationNo" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">
+      <label className="mb-[5px] font-semi-bold text-[#868585] font">
         Experience
       </label>
       <Form.Item name="noOfExperience" rules={[{ required: true }]}>
         <Input className="border" placeholder="noOfExperience" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">
+      <label className="mb-[5px] font-semi-bold text-[#868585] font">
         Specialization
       </label>
       <Form.Item name="specialization" rules={[{ required: true }]}>
         <Input className="border" placeholder="specialization" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">Age</label>
+      <label className="mb-[5px] font-semi-bold text-[#868585] font">Age</label>
       <Form.Item name="age" rules={[{ required: true }]}>
         <Input className="border" placeholder="age" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]">Gender</label>
+      <label className="mb-[5px] font-semi-bold text-[#868585] font">Gender</label>
       <Form.Item name="gender" rules={[{ required: true }]}>
         <Input className="border" placeholder="gender" />
       </Form.Item>
 
       <Form.Item>
         <Button
-          className="bg-[#2361dd] text-white"
+          className="bg-[#2361dd] text-white text-center"
           htmlType="submit"
           // loading={loadingUpdateProfile}
         >
