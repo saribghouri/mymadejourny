@@ -74,27 +74,29 @@ const Login = () => {
 
   return (
     <main className=" flex min-h-screen flex-row items-center justify-between ">
- <div 
-    className=" bg-cover w-[100%] h-[712px] rounded-tr-[10px] rounded-br-[10px] absolute top-0 left-0"
-    style={{ 
-     
-    }}>
-
-<div className="bg-[#2361dd] min-h-[801px] max-h-[1280px] w-[50%] h-[712px] rounded-tr-[10px] rounded-br-[10px] relative" style={{ backgroundImage: `url("/assserts/images/bg.jpg")`, backgroundSize: 'cover', backgroundPosition: 'center',  }}></div>
-  
-</div>
-<h1 className="text-white text-center flex justify-center items-center h-[700px]">
-    <Image
-      width={400}
-      height={400}
-      alt=""
-      className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2"
-      src="/assserts/images/logo-white.png"
-    />
-  </h1>
+      <div
+        className=" bg-cover w-[100%] rounded-tr-[10px] rounded-br-[10px] absolute top-0 left-0"
+        style={{}}
+      >
+        <div
+          className="bg-[#2361dd]   w-[50%] h-[712px] rounded-tr-[10px] rounded-br-[10px] relative"
+          style={{
+            backgroundImage: `url("/assserts/images/bg.jpg")`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></div>
+      </div>
+      <h1 className="text-white text-center flex justify-center items-center h-[700px]">
+        <Image
+          width={400}
+          height={400}
+          alt=""
+          className="absolute top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2"
+          src="/assserts/images/logo-white.png"
+        />
+      </h1>
       <div className="bg-[#d8e4f5] shadow-[rgba(0,0,0,0.1)] gap-[20px] rounded-[20px] h-[500px] text-center flex flex-col w-[400px] mr-[40px]">
-       
-       
         <div className="bg-[#2361dd] rounded-t-[20px] w-[400px] h-[400px] flex items-center justify-center">
           <h1 className="text-[30px] font-bold text-white"> Login</h1>
         </div>
