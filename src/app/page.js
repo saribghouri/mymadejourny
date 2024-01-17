@@ -96,7 +96,7 @@ const Login = () => {
           src="/assserts/images/logo-white.png"
         />
       </h1>
-      <div className="bg-[#d8e4f5] shadow-[rgba(0,0,0,0.1)] gap-[20px] rounded-[20px] h-[500px] text-center flex flex-col w-[400px] mr-[40px]">
+      <div className="bg-[#d8e4f5] shadow-[rgba(0,0,0,0.1)] gap-[20px] rounded-[20px] h-[500px] text-center flex flex-col w-[400px] mr-[108px]">
         <div className="bg-[#2361dd] rounded-t-[20px] w-[400px] h-[400px] flex items-center justify-center">
           <h1 className="text-[30px] font-bold text-white"> Login</h1>
         </div>
