@@ -79,7 +79,7 @@ const Login = () => {
         style={{}}
       >
         <div
-          className="bg-[#2361dd] min-h-screen w-[50%] h-[712px] rounded-tr-[10px] rounded-br-[10px] relative"
+          className="bg-[#2361dd] min-h-screen w-[50%]  rounded-tr-[10px] rounded-br-[10px] relative"
           style={{
             backgroundImage: `url("/assserts/images/bg.jpg")`,
             backgroundSize: "cover",
