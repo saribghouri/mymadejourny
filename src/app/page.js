@@ -80,7 +80,7 @@ const Login = () => {
      
     }}>
 
-<div className="bg-[#2361dd] w-[50%] h-[712px] rounded-tr-[10px] rounded-br-[10px] relative" style={{ backgroundImage: `url("/assserts/images/bg.jpg")`, backgroundSize: 'cover', backgroundPosition: 'center',  }}></div>
+<div className="bg-[#2361dd] min-h-[801px] max-h-[1280px] w-[50%] h-[712px] rounded-tr-[10px] rounded-br-[10px] relative" style={{ backgroundImage: `url("/assserts/images/bg.jpg")`, backgroundSize: 'cover', backgroundPosition: 'center',  }}></div>
   
 </div>
 <h1 className="text-white text-center flex justify-center items-center h-[700px]">
