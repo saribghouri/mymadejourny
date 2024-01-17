@@ -5,10 +5,6 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-
-
-
-
 export default function RootLayout({ children }) {
   const [loading, setLoading] = useState(true);
 

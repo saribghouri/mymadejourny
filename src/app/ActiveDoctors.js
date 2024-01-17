@@ -254,6 +254,10 @@ const ActiveDoctors = () => {
                 <span className="font-bold mr-[60px]">affiliationNo:</span>
                 <p>{selectedDoctor.affiliationNo} </p>
               </p>
+              <p className="flex justify-between items-center">
+                <span className="font-bold mr-[60px]">Categories:</span>
+                <p>{selectedDoctor.doctorCategoryName} </p>
+              </p>
             </div>
           </div>
         )}
