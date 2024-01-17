@@ -2,7 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.cdnfonts.com/css/aristotelica-display-trial");
+/* @import url("public\assserts\FONTS\aristrotel\AristotelicaSmallCaps-Regular.ttf"); */
+@font-face {
+  font-family: myFirstFont;
+  src: url(Aristotelica\ Display\ DemiBold\ Trial.ttf);
+  weight: 400
+}
+
 
 .inputWithBorder {
   border-bottom: 3px solid black;
@@ -168,7 +174,7 @@
 .Doctor-Requests,
 .pharmacy-Requests,
 .Doctors {
-  font-family: "Aristotelica Display Trial", sans-serif;
+  font-family: myFirstFont;
   font-size: 22px !important;
 }
 .ant-btn-sm {
@@ -186,7 +192,7 @@
   /* font-family: 'Aristotelica Display Trial', sans-serif; */
 }
 .pgh {
-  font-family: "Aristotelica Display Trial", sans-serif;
+  font-family: myFirstFont;
   font-size: 20px;
   font-weight: 900;
 }
