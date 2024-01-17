@@ -96,12 +96,19 @@ const Login = () => {
           src="/assserts/images/logo-white.png"
         />
       </h1>
-      <div className="bg-[#d8e4f5] shadow-[rgba(0,0,0,0.1)] gap-[20px] rounded-[20px] h-[500px] text-center flex flex-col w-[400px] mr-[108px]">
+
+
+
+
+
+
+      <div className="flex justify-center items-center w-[50%]">
+      <div className="bg-[#d8e4f5]   shadow-[rgba(0,0,0,0.1)] gap-[20px] rounded-[20px] h-[500px] text-center flex flex-col ">
         <div className="bg-[#2361dd] rounded-t-[20px] w-[400px] h-[400px] flex items-center justify-center">
           <h1 className="text-[30px] font-bold text-white"> Login</h1>
         </div>
 
-        <div className=" p-6 gap-[40px] rounded-[20px] h-[500px] text-center flex flex-col w-[330px] mx-auto">
+        <div className="  p-6 gap-[40px] rounded-[20px] h-[500px] justify-center text-center flex flex-col w-[330px] mx-auto">
           <Form
             name="loginForm"
             initialValues={{ remember: true }}
@@ -179,6 +186,8 @@ const Login = () => {
           </Form>
           <Link>forgot passowrd?</Link>
         </div>
+      </div>
+
       </div>
     </main>
   );
