@@ -79,7 +79,7 @@ const Login = () => {
         style={{}}
       >
         <div
-          className="bg-[#2361dd]   w-[50%] h-[712px] rounded-tr-[10px] rounded-br-[10px] relative"
+          className="bg-[#2361dd] min-h-screen w-[50%] h-[712px] rounded-tr-[10px] rounded-br-[10px] relative"
           style={{
             backgroundImage: `url("/assserts/images/bg.jpg")`,
             backgroundSize: "cover",
@@ -87,7 +87,7 @@ const Login = () => {
           }}
         ></div>
       </div>
-      <h1 className="text-white text-center flex justify-center items-center h-[700px]">
+      <h1 className="text-white text-center flex justify-center items-center min-h-screen">
         <Image
           width={400}
           height={400}
