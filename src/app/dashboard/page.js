@@ -109,7 +109,6 @@ const App = () => {
         setShowChangePasswordModal(false);
       } else {
         message.error("Failed to send password reset link");
-     
       }
     } catch (error) {
       console.error("Error during forget password:", error);
@@ -131,7 +130,7 @@ const App = () => {
         );
         if (response.ok) {
           const data = await response.json();
-      
+
           setImageUrl(data?.user_details[0]?.profileImage);
           setUserDetails(data.user_details[0]);
           setForceRerender((prev) => !prev);
@@ -369,9 +368,7 @@ const App = () => {
     setShowActivePharmacy(false);
   };
 
-  const onFinishFailed = (errorInfo) => {
-  
-  };
+  const onFinishFailed = (errorInfo) => {};
   const [collapsed, setCollapsed] = useState(false);
   const handleCollapse = (collapsed) => {
     setCollapsed(collapsed);
@@ -392,16 +389,7 @@ const App = () => {
   }
   const generateMenuItems = () => {
     if (userDetails.userRole === "1") {
-     
       return [
-        getItem(
-          "Dashboard ",
-          <DashboardOutlined />,
-
-          <>
-            <a onClick={handleCards}></a>
-          </>
-        ),
         getItem("Request's", "sub1", <BookOutlined />, [
           getItem(
             "",
@@ -609,13 +597,11 @@ const App = () => {
   };
 
   const handleChange = (info) => {
-
     if (info.file) {
       getBase64(info.file.originFileObj || info.file, (url) => {
         setLoading(false);
         setImageUrl(url);
         setForceRerender((prev) => !prev);
-       
       });
     }
   };
@@ -732,7 +718,19 @@ const App = () => {
             />
           </h1>
         </div>
-
+        <Menu
+          theme="dark"
+          mode="inline"
+          // defaultSelectedKeys={["1"]}
+          items={[
+            {
+              key: "1",
+              icon: <UserOutlined />,
+              label: "Dashboard",
+              onClick: handleCards, 
+            },
+          ]}
+        />
         <div className="demo-logo-vertical bg-[#fff]" />
         <Menu
           className=""
@@ -906,7 +904,7 @@ const App = () => {
                       {imageUrl && typeof imageUrl === "string" ? (
                         <img
                           alt=""
-                          className="w-[70px] h-[70px] rounded-[50%]"
+                          className="w-[70px] h-[0px] rounded-[50%]"
                           src={imageUrl}
                         />
                       ) : userProfileImage ? (
@@ -1059,7 +1057,9 @@ const App = () => {
         <div>
           {ShowPharmacie && <ShowPharmacies />}
           {showPharmacy && <PharmacyData />}
-          {appointment && (<AddAppointment  handleAppointments={handleAppointments} />)}
+          {appointment && (
+            <AddAppointment handleAppointments={handleAppointments} />
+          )}
           {showDoctor && <DoctorData />}
           {allPharmacies && <ShowAllPharmacies />}
           {requestDoctor && <RequestDoctor />}
