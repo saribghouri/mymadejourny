@@ -610,7 +610,8 @@ const App = () => {
   };
 
   const handleChange = (info) => {
-    if (info.file.status === "done") {
+    console.log(info)
+    if (info.file) {
       getBase64(info.file.originFileObj || info.file, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -899,7 +900,7 @@ const App = () => {
                       listType="picture-card"
                       className="avatar-uploader w-[100%]"
                       showUploadList={false}
-                      action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                      // action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                       beforeUpload={beforeUpload}
                       onChange={handleChange}
                     >
