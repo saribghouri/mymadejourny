@@ -361,6 +361,7 @@ const App = () => {
     setRequestPharmacy(false);
     setRequestDoctor(false);
     setAppointment(false);
+    setShowCategories(false);
     setShowDoctor(false);
     setAllPharmacies(false);
     setShowPharmacy(false);
