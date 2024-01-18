@@ -9,6 +9,7 @@ const Cards = () => {
     const [pharmacyCount, setPharmacyCount] = useState(false);
     const [inActiveDoctors, setInActiveDoctors] = useState(false);
     const [inActivePharmacy, setInActivePharmacy] = useState(false);
+    const [users, setUsers] = useState(false);
     const [loading, setLoading] = useState(false);
     console.log(pharmacyCount)
     const [doctorsCount, setDoctorsCount] = useState(0);
@@ -94,7 +95,36 @@ const Cards = () => {
 
     fetchData();
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = Cookies.get("apiToken");
+        const response = await fetch(
+          "https://mymedjournal.blownclouds.com/api/all/user/fetch",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Doctors fetched successfully:", data);
+          setUsers(data.all_users["data"].length);
+        } else {
+          console.error("Failed to fetch doctors");
+        }
+      } catch (error) {
+        console.error("Error fetching doctors:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div>
       <div>
@@ -168,6 +198,17 @@ const Cards = () => {
             </p>
             <p className="text-[#c01c1c] flex justify-end mr-10 font-bold text-30">
               {inActivePharmacy}
+            </p>
+          </Card>
+          <Card
+            className="bg-[#e1edff] card"
+            style={{ width: "calc(32.33% - 10px)" }}
+          >
+            <p className="text-[#c01c1c] pgh font-bold text-22">
+             Users
+            </p>
+            <p className="text-[#c01c1c] flex justify-end mr-10 font-bold text-30">
+              {users}
             </p>
           </Card>
         </div>
