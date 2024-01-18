@@ -37,7 +37,7 @@ const ActivePharmacy = () => {
         if (response.ok) {
           const data = await response.json();
 
-          console.log("Pharmacies fetched successfully:", data);
+          
           setPharmacies(data.active_Pharmacie);
         } else {
           console.error("Failed to fetch pharmacies. Status:", response.status);
@@ -62,7 +62,7 @@ const ActivePharmacy = () => {
         emailAddress: Pharmacies.emailAddress,
       }))
     : [];
-  console.log("data", datas);
+ 
   const handleView = (doctor) => {
     setSelectedPharmacies(doctor);
     setModalVisible(true);

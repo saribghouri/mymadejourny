@@ -41,7 +41,7 @@ const PharmacyData = () => {
         if (response.ok) {
           const data = await response.json();
 
-          console.log("Pharmacies fetched successfully:", data);
+   
           setPharmacies(data.all_pharmacies);
         } else {
           console.error("Failed to fetch pharmacies. Status:", response.status);
@@ -100,7 +100,7 @@ const PharmacyData = () => {
           },
         }
       );
-      console.log("response", response);
+    
       if (response.ok) {
         const updatedPharmacies = Pharmacies.map((Pharmacies) =>
           Pharmacies.id === userId
@@ -129,7 +129,7 @@ const PharmacyData = () => {
           },
         }
       );
-      console.log("response", response);
+     
 
       if (response.ok) {
         const updatedPharmacies = Pharmacies.map((Pharmacies) =>
@@ -250,7 +250,7 @@ const PharmacyData = () => {
       );
 
       if (response.ok) {
-        console.log("User edited successfully");
+     
         setPharmacies((prevDoctors) =>
           prevDoctors.map((doctor) =>
             doctor.id === selectedPharmacy.id

@@ -12,7 +12,7 @@ const ShowPharmacies = () => {
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
   const [medicineImageVisible, setMedicineImageVisible] = useState(false);
   const [medicineImage, setMedicineImage] = useState("");
-  console.log(userData);
+ 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {

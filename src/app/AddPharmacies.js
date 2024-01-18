@@ -13,7 +13,7 @@ const AddPharmacies = () => {
   const router = useRouter();
 
   const onFinish = async (values) => {
-    console.log(values);
+
     try {
       const token = Cookies.get("apiToken");
       const formData = new FormData();
@@ -39,7 +39,7 @@ const AddPharmacies = () => {
         router.push("/dashboard");
       } else {
         message.error("Pharmacie not added");
-        console.log("Response:", response);
+       
       }
     } catch (error) {
       console.error("Error during adding pharmacy:", error);
@@ -47,7 +47,7 @@ const AddPharmacies = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+   
   };
 
   const handleClick = () => {
@@ -94,7 +94,7 @@ const AddPharmacies = () => {
 
   const handleChange = (info) => {
     if (info.file.status === "done") {
-      console.log("Upload Response:", info.file.response);
+
       getBase64(info.file.originFileObj, (url) => {
         setLoading(false);
         setImageUrl(url);

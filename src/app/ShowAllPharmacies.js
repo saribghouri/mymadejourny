@@ -54,8 +54,7 @@ const ShowAllPharmacies = () => {
     userId: pharmacie.userId || "",
   }));
   
-  console.log("data", pharmacie);
-  console.log("data", pharmacie);
+  ;
   const handleAdd = () => {
     setEditingpharmacie(null);
     form.resetFields();
@@ -70,7 +69,7 @@ const ShowAllPharmacies = () => {
   };
 
   const handleDelete = async (id, userIds) => {
-    console.log("userId", userIds);
+
     try {
       const token = Cookies.get("apiToken");
       const response = await fetch(

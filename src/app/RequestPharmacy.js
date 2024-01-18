@@ -18,15 +18,7 @@ const RequestPharmacy = () => {
       )
     : [];
   const userId = data[0]?.id;
-  console.log("userId", userId);
 
-
-
-
-
-
-
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -48,7 +40,6 @@ const RequestPharmacy = () => {
             ? responseData.inactive_pharmacies
             : [];
 
-          console.log("pharmacy request fetched successfully:", pharmacyData);
           setData(pharmacyData);
         } else {
           console.error(
@@ -85,7 +76,6 @@ const RequestPharmacy = () => {
       if (response.ok) {
         const updatedData = data.filter((pharmacy) => pharmacy.id !== userId);
         setData(updatedData);
-        console.log("pharmacy activated successfully", updatedData);
       } else {
         console.error("Failed to activate pharmacy. Status:", response.status);
       }
@@ -95,7 +85,7 @@ const RequestPharmacy = () => {
   };
   const handleRejectModalOpen = (userId) => {
     setRejectModalVisible(true);
-    setSelectedUserId(userId)
+    setSelectedUserId(userId);
   };
 
   const handleRejectReason = async (userId) => {
@@ -121,11 +111,10 @@ const RequestPharmacy = () => {
             ? { ...pharmacy, rejecteReason: rejecteReason }
             : pharmacy
         );
-  
+
         setData(updatedpharmacy);
         setRejectModalVisible(false);
-        setRejecteReason("")
-        console.log("pharmacy rejected successfully");
+        setRejecteReason("");
       } else {
         console.error("Failed to reject pharmacy. Status:", response.status);
       }
@@ -167,10 +156,24 @@ const RequestPharmacy = () => {
   }));
   const columns = [
     { title: "No", dataIndex: "serialNumber", key: "serialNumber" }, // New column
-    { title: "Profile", dataIndex: "profileImage", key: "profileImage", render: (text, record) => <img src={text} style={{ width: 50, height: 50, borderRadius: '50%' }} /> },
+    {
+      title: "Profile",
+      dataIndex: "profileImage",
+      key: "profileImage",
+      render: (text, record) => (
+        <img
+          src={text}
+          style={{ width: 50, height: 50, borderRadius: "50%" }}
+        />
+      ),
+    },
     { title: "User Name", dataIndex: "userName", key: "userName" },
     { title: "Email Address", dataIndex: "emailAddress", key: "emailAddress" },
-    { title: "Rejection Reason", dataIndex: "rejecteReason", key: "rejecteReason" },
+    {
+      title: "Rejection Reason",
+      dataIndex: "rejecteReason",
+      key: "rejecteReason",
+    },
     {
       title: "Actions",
       dataIndex: "actions",
@@ -223,22 +226,22 @@ const RequestPharmacy = () => {
   ];
   return (
     <div>
-    <div className="flex justify-between pl-[20px] pr-[20px] items-center mt-[20px] mb-[20px]">
-      <h1 className="pharmacy-Requests">Pharmacy Requests</h1>
-      <Input
-        className="w-[300px] rounded-[40px]"
-        placeholder="Input search text"
-        suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
+      <div className="flex justify-between pl-[20px] pr-[20px] items-center mt-[20px] mb-[20px]">
+        <h1 className="pharmacy-Requests">Pharmacy Requests</h1>
+        <Input
+          className="w-[300px] rounded-[40px]"
+          placeholder="Input search text"
+          suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+      </div>
+      <Table
+        columns={columns}
+        loading={loading}
+        dataSource={dataSourceWithSerial}
       />
     </div>
-    <Table
-      columns={columns}
-      loading={loading}
-      dataSource={dataSourceWithSerial}
-    />
-  </div>
   );
 };
 

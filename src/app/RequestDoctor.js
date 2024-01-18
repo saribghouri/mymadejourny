@@ -18,7 +18,7 @@ const RequestDoctor = () => {
       )
     : [];
   const userId = data[0]?.id;
-  console.log("userId", userId);
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,12 +36,11 @@ const RequestDoctor = () => {
 
         if (response.ok) {
           const responseData = await response.json();
-          console.log(responseData);
+    
           const doctorData = Array.isArray(responseData.inactive_doctor)
             ? responseData.inactive_doctor
             : [];
 
-          console.log("Doctor request fetched successfully:", doctorData);
           setData(doctorData);
         } else {
           console.error(
@@ -77,7 +76,7 @@ const RequestDoctor = () => {
       if (response.ok) {
         const updatedData = data.filter((doctor) => doctor.id !== userId);
         setData(updatedData);
-        console.log("Doctor activated successfully", updatedData);
+ 
       } else {
         console.error(
           "Failed credent to activate doctor. Status:",
@@ -116,10 +115,10 @@ const RequestDoctor = () => {
             ? { ...doctor, rejecteReason: rejecteReason }
             : doctor
         );
-        console.log(updatedData);
+ 
         setData(updatedData);
         setRejectModalVisible(false);
-        console.log("Doctor rejected successfully");
+
       } else {
         console.error("Failed to reject doctor. Status:", response.status);
       }
@@ -146,7 +145,7 @@ const RequestDoctor = () => {
       if (response.ok) {
         setRejectModalVisible(false);
         setRejecteReason("")
-        console.log("Doctor rejected successfully");
+
       } else {
         console.error("Failed to reject doctor. Status:", response.status);
       }

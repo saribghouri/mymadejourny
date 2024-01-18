@@ -41,7 +41,7 @@ const Appointments = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("User details fetched successfully:", data);
+
           setUserId(data.user_details[0].id);
         } else {
           console.error("Failed to fetch user details");
@@ -72,7 +72,7 @@ const Appointments = () => {
 
           if (response.ok) {
             const data = await response.json();
-            console.log("Doctors fetched successfully:", data);
+           
             if (
               data.appointment &&
               data.appointment[0] &&

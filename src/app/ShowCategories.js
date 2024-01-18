@@ -38,7 +38,7 @@ const DoctorData = () => {
   
         if (response.ok) {
           const data = await response.json();
-          console.log("categories fetched successfully:", data);
+
           if (Array.isArray(data.Doctor_Category["data"])) {
             setCategories(data.Doctor_Category["data"]);
   
@@ -174,7 +174,7 @@ const DoctorData = () => {
         setImageUrl(url);
         setEditCategoryImage(url)
         setForceRerender((prev) => !prev);
-        console.log("Image URL:", url);
+
       });
     }
   };

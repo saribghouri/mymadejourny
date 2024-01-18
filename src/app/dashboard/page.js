@@ -70,7 +70,7 @@ const App = () => {
   const [showProfileEditModal, setShowProfileEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
-  console.log("🚀 ~ imageUrl:", imageUrl);
+
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -78,8 +78,7 @@ const App = () => {
   const [userProfileImage, setUserProfileImage] = useState(
     userDetails?.profileImage || null
   );
-  console.log("🚀 ~ userProfileImage:", userProfileImage);
-  console.log(userDetails);
+
   const handleShowProfileEditModal = () => {
     setShowProfileEditModal(true);
   };
@@ -110,7 +109,7 @@ const App = () => {
         setShowChangePasswordModal(false);
       } else {
         message.error("Failed to send password reset link");
-        console.log("Response:", response);
+     
       }
     } catch (error) {
       console.error("Error during forget password:", error);
@@ -132,7 +131,7 @@ const App = () => {
         );
         if (response.ok) {
           const data = await response.json();
-          console.log("🚀 ~ data:", data);
+      
           setImageUrl(data?.user_details[0]?.profileImage);
           setUserDetails(data.user_details[0]);
           setForceRerender((prev) => !prev);
@@ -371,7 +370,7 @@ const App = () => {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  
   };
   const [collapsed, setCollapsed] = useState(false);
   const handleCollapse = (collapsed) => {
@@ -393,7 +392,7 @@ const App = () => {
   }
   const generateMenuItems = () => {
     if (userDetails.userRole === "1") {
-      console.log("sabgqebew");
+     
       return [
         getItem(
           "Dashboard ",
@@ -610,13 +609,13 @@ const App = () => {
   };
 
   const handleChange = (info) => {
-    console.log(info)
+
     if (info.file) {
       getBase64(info.file.originFileObj || info.file, (url) => {
         setLoading(false);
         setImageUrl(url);
         setForceRerender((prev) => !prev);
-        console.log("Image URL:", url);
+       
       });
     }
   };

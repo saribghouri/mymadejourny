@@ -16,7 +16,7 @@ const Users = () => {
         )
       : [];
 
-  console.log("doctors", doctors);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +34,7 @@ const Users = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Doctors fetched successfully:", data);
+
           setDoctors(data.all_users["data"]);
         } else {
           console.error("Failed to fetch doctors");

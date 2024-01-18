@@ -10,7 +10,7 @@ const AddCategories = ({ handleShowCategories }) => {
   const [loading, setLoading] = useState(false);
 
   const [categoryResponse, setCategoryResponse] = useState(null);
-  console.log("DdbbeBNn", categoryResponse);
+
   const [category, setCategory] = useState(false);
 
   const getBase64 = (img, callback) => {
@@ -38,7 +38,6 @@ const AddCategories = ({ handleShowCategories }) => {
   };
   const onFinish = async (values) => {
     setLoading(true);
-    console.log(values);
 
     try {
       const formData = new FormData();
@@ -79,16 +78,13 @@ const AddCategories = ({ handleShowCategories }) => {
       setLoading(false);
     }
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo) => {};
 
   const handleChange = (info) => {
     if (info.file.status === "done") {
       getBase64(info.file.originFileObj, (url) => {
         setLoading(false);
         setImageUrl(url);
-        console.log("Image URL:", url);
       });
     }
   };

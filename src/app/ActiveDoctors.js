@@ -16,7 +16,7 @@ const ActiveDoctors = () => {
         )
       : [];
 
-  console.log("doctors", doctors);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,13 +34,13 @@ const ActiveDoctors = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log("Doctors fetched successfully:", data);
+     
           setDoctors(data.active_doctor);
         } else {
-          console.error("Failed to fetch doctors");
+
         }
       } catch (error) {
-        console.error("Error fetching doctors:", error);
+
       } finally {
         setLoading(false);
       }

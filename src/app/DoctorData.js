@@ -227,7 +227,7 @@ const DoctorData = () => {
       );
 
       if (response.ok) {
-        console.log("User edited successfully");
+   
         setDoctors((prevDoctors) =>
           prevDoctors.map((doctor) =>
             doctor.id === selectedDoctor.id ? { ...doctor, ...values } : doctor
@@ -249,7 +249,7 @@ const DoctorData = () => {
   const handleDelete = async (userId) => {
     try {
       const token = Cookies.get("apiToken");
-      console.log("Deleting user with ID:", userId);
+ 
 
       const response = await fetch(
         `https://mymedjournal.blownclouds.com/api/delete-user/${userId}`,
@@ -262,7 +262,7 @@ const DoctorData = () => {
         }
       );
 
-      console.log("Response from delete API:", response);
+ 
 
       if (response.ok) {
         message.success("Doctor deleted successfully");

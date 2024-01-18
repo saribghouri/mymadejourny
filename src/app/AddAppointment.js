@@ -37,7 +37,7 @@ const AddAppointment = ({handleAppointments}) => {
         setCategory(true)
         handleAppointments()
         message.success("Appointment added successfully");
-        console.log("Appointment added successfully", jsonResponse);
+    
       } else {
         const errorResponse = await response.json(); 
         message.error("Appointment creation failed", errorResponse);
@@ -47,7 +47,7 @@ const AddAppointment = ({handleAppointments}) => {
     }
   };
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+   
   };
   return (
     <div>
