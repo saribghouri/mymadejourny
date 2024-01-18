@@ -700,12 +700,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    setLoadingUpdateProfile(true)
     const isUserLoggedIn = Cookies.get("apiToken");
 
     if (!isUserLoggedIn) {
       router.push("/");
-      setLoadingUpdateProfile(false)
     }
   }, [router]);
 
@@ -908,13 +906,13 @@ const App = () => {
                       {imageUrl && typeof imageUrl === "string" ? (
                         <img
                           alt=""
-                          className="w-[70px] h-[70px] rounded-[50%] object-fill"
+                          className="w-[70px] h-[70px] rounded-[50%]"
                           src={imageUrl}
                         />
                       ) : userProfileImage ? (
                         <img
                           alt=""
-                          className="w-[30px] h-[30px] rounded-[50%]"
+                          className="w-[70px] h-[70px] rounded-[50%]"
                           src={userProfileImage}
                         />
                       ) : (
