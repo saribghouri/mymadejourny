@@ -70,6 +70,7 @@ const App = () => {
   const [showProfileEditModal, setShowProfileEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
+  console.log("🚀 ~ imageUrl:", imageUrl);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -77,6 +78,7 @@ const App = () => {
   const [userProfileImage, setUserProfileImage] = useState(
     userDetails?.profileImage || null
   );
+  console.log("🚀 ~ userProfileImage:", userProfileImage);
   console.log(userDetails);
   const handleShowProfileEditModal = () => {
     setShowProfileEditModal(true);
@@ -130,6 +132,8 @@ const App = () => {
         );
         if (response.ok) {
           const data = await response.json();
+          console.log("🚀 ~ data:", data);
+          setImageUrl(data?.user_details[0]?.profileImage);
           setUserDetails(data.user_details[0]);
           setForceRerender((prev) => !prev);
         } else {
@@ -306,7 +310,6 @@ const App = () => {
     setAppointments(false);
     setCards(false);
     setUsers(false);
-
     setCategories(false);
     setRequestPharmacy(false);
     setRequestDoctor(false);
@@ -469,7 +472,6 @@ const App = () => {
           ),
         ]),
         getItem("Users ", "sub30", <TeamOutlined />, [
-      
           getItem(
             "",
             "sub48",
@@ -663,13 +665,14 @@ const App = () => {
         const data = await response.json();
         setLoadingUpdateProfile(false);
 
+        console.log("🚀 ~ data:", data);
         const updatedUserDetails = {
           ...userDetails,
           userName: values.userName,
           affiliationNo: values.affiliationNo,
-          profileImage: data.profileImage || userDetails.profileImage,
+          profileImage: imageUrl,
         };
-        setUserDetails(updatedUserDetails);
+        setUserDetails((p) => ({ ...p, ...updatedUserDetails }));
         setUserProfileImage(data.profileImage || userDetails.profileImage);
 
         message.success("Profile updated successfully");
@@ -694,6 +697,15 @@ const App = () => {
     // Toggle the state to show/hide cards
     setShowCards(!showCards);
   };
+
+  useEffect(() => {
+    const isUserLoggedIn = Cookies.get("apiToken");
+
+    if (!isUserLoggedIn) {
+      router.push("/");
+    }
+  }, [router]);
+
   return (
     <Layout
       className="rounded-[20px]"
@@ -830,7 +842,7 @@ const App = () => {
                 <img
                   alt=""
                   className="w-[30px] h-[30px] rounded-[50%]"
-                  src={imageUrl || userDetails?.profileImage || null}
+                  src={userDetails?.profileImage || null}
                 />
                 <Dropdown
                   className="mr-[20px]"
@@ -1046,7 +1058,7 @@ const App = () => {
         <div>
           {ShowPharmacie && <ShowPharmacies />}
           {showPharmacy && <PharmacyData />}
-          {appointment && <AddAppointment />}
+          {appointment && (<AddAppointment  handleAppointments={handleAppointments} />)}
           {showDoctor && <DoctorData />}
           {allPharmacies && <ShowAllPharmacies />}
           {requestDoctor && <RequestDoctor />}
@@ -1056,7 +1068,9 @@ const App = () => {
           {appointments && <Appointments />}
           {users && <Users />}
           {cards && <Cards />}
-          {categories && <AddCategories />}
+          {categories && (
+            <AddCategories handleShowCategories={handleShowCategories} />
+          )}
           {showCategories && <ShowCategories />}
           {!ShowPharmacie &&
             !showPharmacy &&

@@ -5,7 +5,7 @@ import { TimePicker } from "antd";
 
 import Cookies from "js-cookie";
 import Appointments from "./Appointments";
-const AddAppointment = () => {
+const AddAppointment = ({handleAppointments}) => {
   const [form] = Form.useForm();
   const [initialData, setInitialData] = useState({});
   const [category, setCategory] = useState(false);
@@ -35,6 +35,7 @@ const AddAppointment = () => {
       if (response.ok) {
         const jsonResponse = await response.json(); 
         setCategory(true)
+        handleAppointments()
         message.success("Appointment added successfully");
         console.log("Appointment added successfully", jsonResponse);
       } else {
