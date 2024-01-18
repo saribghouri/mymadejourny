@@ -16,7 +16,7 @@ const DoctorData = () => {
   const [editCategoryName, setEditCategoryName] = useState("");
   const [editCategoryImage, setEditCategoryImage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [imageUrl, setImageUrl] = useState(""); // New state for imageUrl
+  const [imageUrl, setImageUrl] = useState(""); 
   const [forceRerender, setForceRerender] = useState(false);
   const filteredcategories = categories.filter((category) =>
     category.categorieName.toLowerCase().includes(searchText.toLowerCase())
@@ -157,7 +157,7 @@ const DoctorData = () => {
   };
 
   const beforeUpload = (file) => {
-    const isImage = file.type.startsWith("image/");
+    const isImage = file.type === "image/jpeg" || file.type === "image/png";
     if (!isImage) {
       message.error("You can only upload image files!");
     }
@@ -187,7 +187,7 @@ const DoctorData = () => {
       key: "categorieImage",
       render: (categorieImage) => (
         <img
-          className="categorieImage"
+          className="categorieImage w-[50px] h-[50px] rounded-[50%]"
           src={categorieImage}
           alt="categorieImage"
         />
@@ -301,7 +301,7 @@ const DoctorData = () => {
               {imageUrl && typeof imageUrl === "string" ? (
                 <img
                   alt=""
-                  className="w-[30px] h-[30px] rounded-[50%]"
+                  className="w-[50px] h-[50px] rounded-[50%]"
                   src={imageUrl}
                 />
               ) : (
