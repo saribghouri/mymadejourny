@@ -17,6 +17,7 @@ const DoctorData = () => {
   const [editCategoryImage, setEditCategoryImage] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [imageUrl, setImageUrl] = useState(""); 
+  console.log(categories)
   const [forceRerender, setForceRerender] = useState(false);
   const filteredcategories = categories.filter((category) =>
     category.categorieName.toLowerCase().includes(searchText.toLowerCase())
@@ -246,7 +247,7 @@ const DoctorData = () => {
         <h1 className="categories">Categories</h1>
         <Input
           className="w-[300px] rounded-[40px]"
-          placeholder="Input search text"
+          placeholder="Search "
           suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}

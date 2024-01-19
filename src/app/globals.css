@@ -29,9 +29,7 @@
   border: none !important;
  font-family: sans-serif;
   padding-top: 7px;
-  background-color: #2361dd !important;
-  color: #f2f7ff !important;
-
+  
 }
 
 .ant-menu-item-selected {
@@ -224,4 +222,8 @@ font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .font{
   font-family: sans-serif;
+}
+.ant-modal-content> .ant-modal-footer > .ant-btn{
+  background: #2361dd !important;
+  color: #f2f7ff !important;
 }

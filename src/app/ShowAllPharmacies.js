@@ -207,7 +207,7 @@ const ShowAllPharmacies = () => {
         <h1>pharmacies</h1>
         <Input
           className="w-[300px] rounded-[40px]"
-          placeholder="Input search text"
+          placeholder="Search"
           suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}

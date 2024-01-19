@@ -11,6 +11,7 @@ const AddAppointment = ({handleAppointments}) => {
   const [category, setCategory] = useState(false);
 
   const onFinish = async (values) => {
+    console.log(values)
     try {
       const requestBody = {
         appointmentday: values.appointmentday,

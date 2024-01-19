@@ -1,5 +1,5 @@
 "use client";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, Select, message } from "antd";
 import { useRouter } from "next/navigation";
 import Link from "antd/es/typography/Link";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
@@ -51,9 +51,12 @@ const Login = () => {
       } else {
         const errorData = await response.json();
         console.error("API request failed:", errorData);
+        message.error("Failed to login. Invalid Credentials");
+
       }
     } catch (error) {
       console.error("Error during API call:", error);
+
     } finally {
       setLoading(false);
     }
@@ -61,6 +64,7 @@ const Login = () => {
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+
   };
   const [loading, setLoading] = useState(false);
 
@@ -161,9 +165,9 @@ const Login = () => {
                 <Select.Option type="admin" value={1}>
                   Admin
                 </Select.Option>
-                <Select.Option type="Pharmacy" value={4}>
+                {/* <Select.Option type="Pharmacy" value={4}>
                   Pharmacy
-                </Select.Option>
+                </Select.Option> */}
                 <Select.Option type="Doctor" value={3}>
                   Doctor
                 </Select.Option>

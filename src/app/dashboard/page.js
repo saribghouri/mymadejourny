@@ -70,7 +70,7 @@ const App = () => {
   const [showProfileEditModal, setShowProfileEditModal] = useState(false);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [imageUrl, setImageUrl] = useState();
-
+  console.log("🚀 ~ imageUrl:", imageUrl);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
@@ -78,7 +78,8 @@ const App = () => {
   const [userProfileImage, setUserProfileImage] = useState(
     userDetails?.profileImage || null
   );
-
+  console.log("🚀 ~ userProfileImage:", userProfileImage);
+  console.log(userDetails);
   const handleShowProfileEditModal = () => {
     setShowProfileEditModal(true);
   };
@@ -109,6 +110,7 @@ const App = () => {
         setShowChangePasswordModal(false);
       } else {
         message.error("Failed to send password reset link");
+        console.log("Response:", response);
       }
     } catch (error) {
       console.error("Error during forget password:", error);
@@ -130,7 +132,7 @@ const App = () => {
         );
         if (response.ok) {
           const data = await response.json();
-
+          console.log("🚀 ~ data:", data);
           setImageUrl(data?.user_details[0]?.profileImage);
           setUserDetails(data.user_details[0]);
           setForceRerender((prev) => !prev);
@@ -368,7 +370,9 @@ const App = () => {
     setShowActivePharmacy(false);
   };
 
-  const onFinishFailed = (errorInfo) => {};
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   const [collapsed, setCollapsed] = useState(false);
   const handleCollapse = (collapsed) => {
     setCollapsed(collapsed);
@@ -389,22 +393,35 @@ const App = () => {
   }
   const generateMenuItems = () => {
     if (userDetails.userRole === "1") {
+      console.log("sabgqebew");
       return [
+        getItem(
+          " ",
+          <DashboardOutlined />,
+
+          <div onClick={handleCards} className="w-[500px] h-[50px]">
+           Dashboard
+          </div>
+        ),
         getItem("Request's", "sub1", <BookOutlined />, [
           getItem(
             "",
             "1",
 
-            <>
-              <button onClick={handlePharmRequest}> Pharmacy Request</button>
-            </>
+            <button
+              onClick={handlePharmRequest}
+              className="w-[500px] h-[50px] "
+            >
+              Pharmacy Request
+            </button>
           ),
           getItem(
             " ",
             "2",
-            <>
-              <button onClick={handleDocRequest}> Doctor Request</button>
-            </>
+            <div onClick={handleDocRequest} className="w-[500px] h-[50px]">
+              
+                 Doctor Request
+            </div>
           ),
         ]),
         getItem("Doctor", "sub25", <TeamOutlined />, [
@@ -418,9 +435,10 @@ const App = () => {
           getItem(
             "",
             "sub42",
-            <>
-              <button onClick={handleShowActiveDoctor}> Active Doctors</button>
-            </>
+            <div onClick={handleShowActiveDoctor} className="w-[500px] h-[50px]">
+              
+                 Active Doctors
+            </div>
           ),
         ]),
 
@@ -428,18 +446,20 @@ const App = () => {
           getItem(
             "",
             "sub43",
-            <>
-              <button onClick={handleShowPharmacy}>Show Pharmacy</button>
-            </>
+            <div onClick={handleShowPharmacy} className="w-[500px] h-[50px]">
+             
+                Show Pharmacy
+            </div>
           ),
           getItem(
             "",
             "sub48",
-            <>
-              <button onClick={handleShowActivePharmacy}>
-                Active Pharmacy
-              </button>
-            </>
+            <div
+              onClick={handleShowActivePharmacy}
+              className="w-[500px] h-[50px]"
+            >
+              Active Pharmacy
+            </div>
           ),
         ]),
 
@@ -447,25 +467,25 @@ const App = () => {
           getItem(
             "",
             "sub44",
-            <>
-              <button onClick={handleCategories}>Add Categories</button>
-            </>
+            <div onClick={handleCategories} className="w-[500px] h-[50px]">
+              Add Categories
+            </div>
           ),
           getItem(
             "",
             "sub45",
-            <>
-              <button onClick={handleShowCategories}>Show Categories</button>
-            </>
+            <div onClick={handleShowCategories} className="w-[500px] h-[50px] ">
+              Show Categories
+            </div>
           ),
         ]),
         getItem("Users ", "sub30", <TeamOutlined />, [
           getItem(
             "",
-            "sub68",
-            <>
-              <button onClick={handleUsers}>Users</button>
-            </>
+            "sub48",
+            <div onClick={handleUsers} className="w-[500px] h-[50px] ">
+              Users
+            </div>
           ),
         ]),
       ];
@@ -476,9 +496,9 @@ const App = () => {
           getItem(
             "",
             "sub46",
-            <>
-              <a onClick={handleAppointment}>Add appointment</a>
-            </>
+            <div onClick={handleAppointment} className="w-[500px] h-[50px]">
+              Add appointment
+            </div>
           ),
           getItem(
             "",
@@ -602,6 +622,7 @@ const App = () => {
         setLoading(false);
         setImageUrl(url);
         setForceRerender((prev) => !prev);
+        console.log("Image URL:", url);
       });
     }
   };
@@ -718,19 +739,7 @@ const App = () => {
             />
           </h1>
         </div>
-        <Menu
-          theme="dark"
-          mode="inline"
-          // defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "Dashboard",
-              onClick: handleCards, 
-            },
-          ]}
-        />
+
         <div className="demo-logo-vertical bg-[#fff]" />
         <Menu
           className=""
@@ -897,14 +906,14 @@ const App = () => {
                       listType="picture-card"
                       className="avatar-uploader w-[100%]"
                       showUploadList={false}
-                      // action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                      action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                       beforeUpload={beforeUpload}
                       onChange={handleChange}
                     >
                       {imageUrl && typeof imageUrl === "string" ? (
                         <img
                           alt=""
-                          className="w-[70px] h-[0px] rounded-[50%]"
+                          className="w-[70px] h-[70px] rounded-[50%]"
                           src={imageUrl}
                         />
                       ) : userProfileImage ? (

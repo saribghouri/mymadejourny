@@ -274,7 +274,7 @@ const PharmacyData = () => {
         <h1 className="Register-Pharmacy">Pharmacies</h1>
         <Input
           className="w-[300px] rounded-[40px]"
-          placeholder="Input search text"
+          placeholder="Search"
           suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
@@ -401,18 +401,7 @@ const EditUserForm = ({ doctor, onSave }) => {
       <Form.Item name="affiliationNo" rules={[{ required: true }]}>
         <Input className="border" placeholder="affiliationNo" />
       </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">
-        Experience
-      </label>
-      <Form.Item name="noOfExperience" rules={[{ required: true }]}>
-        <Input className="border" placeholder="noOfExperience" />
-      </Form.Item>
-      <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">
-        Specialization
-      </label>
-      <Form.Item name="specialization" rules={[{ required: true }]}>
-        <Input className="border" placeholder="specialization" />
-      </Form.Item>
+   
       <label className="mb-[5px] font-semi-bold text-[#868585]  pt-[5px]">Age</label>
       <Form.Item name="age" rules={[{ required: true }]}>
         <Input className="border" placeholder="age" />

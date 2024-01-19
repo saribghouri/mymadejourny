@@ -6,7 +6,7 @@ import {
 import {  DatePicker, Form, Input,  Modal,  Popconfirm,  Table, TimePicker, message } from "antd";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-
+import moment from "moment";
 const Appointments = () => {
   const [loading, setLoading] = useState(false);
   const [doctors, setDoctors] = useState([]);
@@ -16,7 +16,7 @@ const Appointments = () => {
   const [editAppointmentId, setEditAppointmentId] = useState(null);
   const [editAppointmentData, setEditAppointmentData] = useState({});
   const [form] = Form.useForm();
-
+console.log(editAppointmentData)
   const filteredDoctor = doctors
     ? doctors.filter((doctor) =>
         doctor.appointmentday.toLowerCase().includes(searchText.toLowerCase())
@@ -41,7 +41,7 @@ const Appointments = () => {
 
         if (response.ok) {
           const data = await response.json();
-
+          console.log("User details fetched successfully:", data);
           setUserId(data.user_details[0].id);
         } else {
           console.error("Failed to fetch user details");
@@ -72,7 +72,7 @@ const Appointments = () => {
 
           if (response.ok) {
             const data = await response.json();
-           
+            console.log("Doctors fetched successfully:", data);
             if (
               data.appointment &&
               data.appointment[0] &&
@@ -172,10 +172,29 @@ const Appointments = () => {
   const handleEdit = (record) => {
     setEditModalVisible(true);
     setEditAppointmentId(record.id);
-    setEditAppointmentData(record);
+    const [startTime, endTime] = record?.appointmenttime?.split(' to ');
+
+    setEditAppointmentData({
+
+    ...record,
+    // appointmenttime:moment(record.appointmenttime,"HH:mm")
+    appointmenttime:[moment(startTime,"HH:mm"),moment(endTime,"HH:mm")]
+    });
+    console.log(record)
+    form.setFieldsValue({
+
+      ...record,
+      // appointmenttime:moment(record.appointmenttime,"HH:mm")
+      appointmenttime:[moment(startTime,"HH:mm"),moment(endTime,"HH:mm")]
+      })
   };
   const handleEditSubmit = async () => {
     try {
+      const values = form.getFieldsValue()
+      const updatedValues = { appointmentday: values.appointmentday,
+        appointmenttime: values.appointmenttime
+          .map((time) => time.format("HH:mm"))
+          .join(" to "),}
       const token = Cookies.get("apiToken");
       const response = await fetch(
         `https://mymedjournal.blownclouds.com/api/appointment/${editAppointmentId}`,
@@ -185,17 +204,17 @@ const Appointments = () => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(form.getFieldsValue()),
+          body: JSON.stringify(updatedValues),
         }
       );
   
       if (response.ok) {
         message.success("Appointment updated successfully");
-  
+
         setDoctors((prevAppointments) =>
           prevAppointments.map((appointment) =>
             appointment.id === editAppointmentId
-              ? { ...appointment, ...form.getFieldsValue() }
+              ? { ...appointment, ...updatedValues }
               : appointment
           )
         );
@@ -216,7 +235,7 @@ const Appointments = () => {
         <h1 className="Appointment">Appointment</h1>
         <Input
           className="w-[300px] rounded-[40px]"
-          placeholder="Input search text"
+          placeholder="search"
           suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
@@ -240,13 +259,27 @@ const Appointments = () => {
           form.resetFields();
         }}
       >
+        <label>Appointment Day</label>
         <Form form={form} initialValues={editAppointmentData}>
-          <Form.Item label="Appointment Day" name="appointmentday">
+          <Form.Item  name="appointmentday">
        <Input/>
           </Form.Item>
-          <Form.Item label="Appointment Time" name="appointmenttime">
-          <Input/>
-          </Form.Item>
+          <label>Appointment Time</label>
+          <Form.Item
+          // label="Appointment Time"
+          name="appointmenttime"
+          rules={[
+            { required: true, message: "Please select appointment time!" },
+          ]}
+          >
+          <TimePicker.RangePicker
+          
+            className="w-[472px]"
+            format="HH:mm"
+            minuteStep={15}
+            // renderExtraFooter={() => " to "}
+            />
+        </Form.Item>
         </Form>
       </Modal>
     </div>

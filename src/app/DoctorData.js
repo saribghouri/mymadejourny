@@ -288,7 +288,7 @@ const DoctorData = () => {
         <h1 className="Doctors">Doctors</h1>
         <Input
           className="w-[300px] rounded-[40px]"
-          placeholder="Input search text"
+          placeholder="Search"
           suffix={<SearchOutlined style={{ color: "rgba(0,0,0,.45)" }} />}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
@@ -426,7 +426,7 @@ const EditUserForm = ({ doctor, onSave }) => {
 
       <Form.Item>
         <Button
-          className="bg-[#2361dd] text-white text-center"
+          className="bg-[#2361dd] !text-white text-center"
           htmlType="submit"
           // loading={loadingUpdateProfile}
         >
