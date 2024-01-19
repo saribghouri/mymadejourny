@@ -1081,7 +1081,7 @@ const App = () => {
           {users && <Users />}
           {cards && <Cards />}
           {categories && (
-            <AddCategories handleShowCategories={handleShowCategories} />
+            <AddCategories handleShowCategories={handleShowCategories}  />
           )}
           {showCategories && <ShowCategories />}
           {!ShowPharmacie &&
