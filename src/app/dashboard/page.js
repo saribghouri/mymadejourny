@@ -391,17 +391,17 @@ const App = () => {
       onClick,
     };
   }
+
   const generateMenuItems = () => {
     if (userDetails.userRole === "1") {
       console.log("sabgqebew");
       return [
         getItem(
-          " ",
-          <DashboardOutlined />,
+          "Dashboard", "1",
+          <DashboardOutlined  />, null, handleCards,
 
-          <div onClick={handleCards} className="w-[500px] h-[50px]">
-           Dashboard
-          </div>
+       
+
         ),
         getItem("Request's", "sub1", <BookOutlined />, [
           getItem(
@@ -489,6 +489,7 @@ const App = () => {
           ),
         ]),
       ];
+
     } else if (userDetails.userRole === "3") {
       return [
         getItem("Dashboard ", "1", <DashboardOutlined />),
@@ -741,6 +742,7 @@ const App = () => {
         </div>
 
         <div className="demo-logo-vertical bg-[#fff]" />
+       
         <Menu
           className=""
           theme="dark"
