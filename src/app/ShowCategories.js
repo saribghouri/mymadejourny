@@ -169,7 +169,7 @@ const DoctorData = () => {
     return isImage && isLt2M;
   };
   const handleChange = (info) => {
-    if (info.file.status === "done") {
+    if (info.file) {
       getBase64(info.file.originFileObj || info.file, (url) => {
         setLoading(false);
         setImageUrl(url);
@@ -271,7 +271,8 @@ const DoctorData = () => {
         onCancel={handleCancelEdit}
       >
         <Form>
-          <Form.Item label="Category Name">
+          <label>Category Name</label>
+          <Form.Item className="mt-[8px]">
             <Input
               value={editCategoryName}
               onChange={(e) => setEditCategoryName(e.target.value)}
