@@ -128,10 +128,10 @@ const Cards = () => {
   return (
     <div>
       <div>
-        <div className="flex flex-wrap gap-4 w-[98%] ml-[10px] mt-10">
+        <div className="flex flex-wrap gap-4 w-[99%] ml-[10px] mt-[10px]">
           <Card
             className="bg-[#e1edff] card"
-            style={{ width: "calc(32.2% - 10px)" }}
+            style={{ width: "32%" }}
           >
             <p className="text-[#2361dd] pgh font-bold text-22">
               Total Doctors
@@ -143,7 +143,7 @@ const Cards = () => {
 
           <Card
             className="bg-[#e1edff] card"
-            style={{ width: "calc(32.33% - 10px)" }}
+            style={{ width: "32%" }}
           >
             <p className="text-[#24ac18] pgh font-bold text-22">
               Active Doctors
@@ -155,7 +155,7 @@ const Cards = () => {
 
           <Card
             className="bg-[#e1edff] card"
-            style={{ width: "calc(32.33% - 10px)" }}
+            style={{ width: "32%" }}
           >
             <p className="text-[#c01c1c] pgh font-bold text-22">
               InActive Doctors
@@ -167,7 +167,7 @@ const Cards = () => {
 
           <Card
             className="bg-[#e1edff] card"
-            style={{ width: "calc(32.33% - 10px)" }}
+            style={{ width: "32%" }}
           >
             <p className="text-[#2361dd] pgh font-bold text-22">
               Total Pharmacies
@@ -179,7 +179,7 @@ const Cards = () => {
 
           <Card
             className="bg-[#e1edff] card"
-            style={{ width: "calc(32.33% - 10px)" }}
+            style={{ width: "32%" }}
           >
             <p className="text-[#24ac18] pgh font-bold text-22">
               Active Pharmacies
@@ -191,7 +191,7 @@ const Cards = () => {
 
           <Card
             className="bg-[#e1edff] card"
-            style={{ width: "calc(32.33% - 10px)" }}
+            style={{ width: "32%" }}
           >
             <p className="text-[#c01c1c] pgh font-bold text-22">
               InActive Pharmacies
@@ -202,7 +202,7 @@ const Cards = () => {
           </Card>
           <Card
             className="bg-[#e1edff] card"
-            style={{ width: "calc(32.33% - 10px)" }}
+            style={{ width: "32%" }}
           >
             <p className="text-[#c01c1c] pgh font-bold text-22">
              Users
